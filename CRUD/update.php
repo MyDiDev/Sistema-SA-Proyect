@@ -1,10 +1,12 @@
+<?php
+include('../Datos/conn.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register <php>Productos</php></title>
-    <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -18,7 +20,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../Estilos/style.css" />
   </head>
   <body>
     <div
@@ -31,13 +33,16 @@
       "
     >
     <?php
-      $server = $_SERVER['PHP_SELF'];
+     $server = $_SERVER['PHP_SELF'];
   
       $options = "";
       $categories = "";
       
       getAllProveedores($conn);
       getAllCategories($conn);
+
+      $id = $_GET['di'];
+    
 
       function getAllProveedores($conn){
         global $options;
@@ -61,12 +66,19 @@
         }
       }
 
-      function formCategorias($server){
+      function formCategorias($server, $id, $conn){
+        $sql = "SELECT * FROM categorias WHERE ID=$id";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $descripcion = $row["nombre_categoria"];
         echo <<<EOD
         <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Categoria</h2>
-          <hr class="w-100 mt-4" color="black" size="7px" />
+
+          <input type="hidden" name="createData" value="1">
           <input type="hidden" name="createTable" value="categorias">
+          <input type="hidden" name="id" value="$id">
+          <hr class="w-100 mt-4" color="black" size="7px" />
           <br />
           <div class="row">
             <div class="col">
@@ -79,6 +91,7 @@
                   rows="3"
                   id="desc"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$descripcion"
                   required
                 />
               </div>
@@ -90,10 +103,22 @@
         EOD;
       }
 
-      function formContacto($server, $options){
+      function formContacto($server, $options, $id, $conn){
+        $sql = "SELECT contactos.ID, proveedores.nombre_empresa, contactos.Nombre_Contacto, contactos.Telefono_Contacto, contactos.Correo_Contacto FROM contactos JOIN proveedores ON contactos.ID = proveedores.ID WHERE concactos.ID=$id";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $nombre_proveedor = $row["nombre_empresa"];
+        $nombre_contacto = $row["Nombre_Contacto"];
+        $telefono = $row["Telefono_Contacto"];
+        $correo = $row["Correo_Contacto"];
+        
         echo <<<EOD
         <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Contacto</h2>
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="contactos">
+          <input type="hidden" name="id" value="$id">
 
           <hr class="w-100 mt-4" color="black" size="7px" />
           <input type="hidden" name="createTable" value="contactos">
@@ -110,6 +135,7 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
+                  <option value="$nombre_proveedor">$nombre_proveedor</option>
                   $options
                 </select>
               </div>
@@ -122,6 +148,7 @@
                   rows="3"
                   id="nombre"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$nombre_contacto"
                   required
                 />
               </div>
@@ -135,6 +162,7 @@
                   rows="3"
                   id="telefono_contacto"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$telefono"
                   required
                 />
               </div>
@@ -148,6 +176,7 @@
                   rows="3"
                   id="correo"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$correo"
                   required
                 />
               </div>
@@ -159,14 +188,22 @@
         EOD;
       }
     
-      function formCondicionPago($server){
+      function formCondicionPago($server, $id, $conn){
+        $sql = "SELECT * FROM condiciones_pago WHERE ID=$id";
 
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $desc = $row["Descripcion"];
+        
         echo <<<EOD
         <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Condicion de Pago</h2>
+          
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="condiciones_pago">
+          <input type="hidden" name="id" value="$id">
 
           <hr class="w-100 mt-4" color="black" size="7px" />
-          <input type="hidden" name="createTable" value="condiciones_pago">
           <br />
           <div class="row">
             <div class="col">
@@ -177,6 +214,7 @@
                 rows="3"
                 id="desc"
                 style="background-color: #151c26; border: none; color: white"
+                value="$desc"
                 required
               ></textarea>
             </div>
@@ -187,19 +225,33 @@
         EOD;
       }
 
-      function formProveedor($server){
-        echo <<<EOD
-      
-        EOD;
-      }
-      
-      function formProducto($server,$proveedores, $categorias){
+
+      function formProducto($server,$proveedores, $categorias, $id, $conn){
+        $sql = "SELECT productos.ID, proveedores.Nombre_Empresa, categorias.Nombre_Categoria, productos.Nombre_Producto, productos.Descripcion_Producto, productos.Codigo_Barra_O_SKU, productos.Precio_Unitario_Venta, productos.Costo_Unitario_Adquisicion, productos.Stock_Actual, productos.Stock_Minimo, productos.Unidad_De_Medida FROM productos JOIN proveedores ON productos.ID_Proveedor = proveedores.ID JOIN categorias ON productos.ID_Categoria = categorias.ID WHERE productos.ID=$id";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $nombre_proveedor = $row["Nombre_Empresa"];
+        $nombre_categoria = $row["Nombre_Categoria"];
+        $Nombre_Producto = $row["Nombre_Producto"];
+        $descripcion = $row["Descripcion_Producto"];
+        $codigo = $row["Codigo_Barra_O_SKU"];
+        $precio = $row["Precio_Unitario_Venta"];
+        $costo = $row["Costo_Unitario_Adquisicion"];
+        $stock_a = $row["Stock_Actual"];
+        $stock_m = $row["Stock_Minimo"];
+        $unidad = $row["Unidad_De_Medida"];
+        
         echo <<<EOD
         <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Producto</h2>
+          
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="productos">
+          <input type="hidden" name="id" value="$id">
+
 
           <hr class="w-100 mt-4" color="black" size="7px" />
-          <input type="hidden" name="createTable" value="productos">
           <br />
           <div class="row">
             <div class="col">
@@ -212,6 +264,7 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
+                  <option value="$nombre_proveedor">$nombre_proveedor</option>
                   $proveedores
                 </select>
               </div>
@@ -223,7 +276,7 @@
                   id="desc"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></textarea>
+                >$descripcion</textarea>
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Codigo SKU:</label>
@@ -233,6 +286,7 @@
                   name="codigo"
                   id="codigo"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$codigo"
                   required
                 >
               </div>
@@ -246,6 +300,7 @@
                   name="costo_a"
                   id="costo_a"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$costo"
                   required
                 >
               </div>
@@ -259,6 +314,7 @@
                   name="unidad_medida"
                   id="unidad_medida"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$unidad"
                   required
                 />
               </div>
@@ -274,6 +330,7 @@
                   name="nombre"
                   id="nombre"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$Nombre_Producto"
                   required
                 />
               </div>
@@ -286,6 +343,7 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
+                  <option value="$nombre_categoria">$nombre_categoria</option>
                   $categorias
                 </select>
               </div>
@@ -297,6 +355,7 @@
                   name="precio_u"
                   id="precio_u"
                   style="background-color: #151c26; border: none; color: white"
+                  value="$precio"
                   required
                 />
               </div>
@@ -307,6 +366,7 @@
                   class="form-control"
                   name="stock_a"
                   id="stock_a"
+                  value="$stock_a"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -318,6 +378,7 @@
                   class="form-control"
                   name="stock_m"
                   id="stock_m"
+                  value="$stock_m"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -330,10 +391,20 @@
         EOD;
       }
 
-      function formArticulos($server, $proveedores, $categorias){
+      function formArticulos($server, $proveedores, $categorias, $id, $conn){
+        $sql = "SELECT articulos_ofrecidos.ID, proveedores.Nombre_Empresa, categorias.Nombre_Categoria FROM articulos_ofrecidos WHERE articulos_ofrecidos.ID=$id";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $proveedor = $row["Nombre_Empresa"];
+        $nombre_categoria = $row["Nombre_Categoria"];
+
         echo <<<EOD
         <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Contacto</h2>
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="articulos_ofrecidos">
+          <input type="hidden" name="id" value="$id">
 
           <hr class="w-100 mt-4" color="black" size="7px" />
           <input type="hidden" name="createTable" value="contactos">
@@ -350,6 +421,7 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
+                  <option value="$proveedor">$proveedor</option>
                   $proveedores
                 </select>
               </div>
@@ -363,6 +435,7 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
+                  <option value"$nombre_categoria">$nombre_categoria</option
                   $categorias
                 </select>
               </div>
@@ -373,7 +446,86 @@
         </form>
         EOD;
       }
-      function actualizarProducto($conn){
+
+      function formProveedor($server, $id, $conn){
+        $sql = "SELECT * FROM proveedores WHERE ID=$id";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $nombre_empresa = $row["Nombre_empresa"];
+        $direccion = $row["direccion"];
+        $tiempo = $row["tiempo_entrega_promedio"];
+        $estado = $row["estado"];
+
+        echo <<<EOD
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+          <h2>Registra un Proveedor</h2>
+          
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="proveedores">
+          <input type="hidden" name="id" value="$id">
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="" class="form-label">Nombre de la Empresa:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="nombre_empresa"
+                  id="provider"
+                  style="background-color: #151c26; border: none; color: white"
+                  value="$nombre_empresa"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="desc" class="form-label">Direccion:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="direccion"
+                  id="desc"
+                  style="background-color: #151c26; border: none; color: white"
+                  value="$direccion"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Fecha de Entrega:</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="tiempo_entrega"
+                  id="tiempo_entrega"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <select name="estado" class="form-control" style="background-color: #151c26; border: none; color: white">
+                  <option value"$estado">$estado</option>
+                  <option value="Activo">Activo</option>
+                  <option value="Activo">Inactivo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
+        EOD;
+      }
+      
+
+      function actualizarProducto($conn, $id){
+        if(!$id){
+          echo "NULL ID given"; 
+          return;
+        }
+
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $categoria = isset($_POST["categoria"]) ? htmlspecialchars($_POST["categoria"]) : null;
         $nombre_producto = isset($_POST["nombre"]) ? htmlspecialchars($_POST["nombre"]) : null;
@@ -388,29 +540,20 @@
 
         $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
         $result = mysqli_query($conn, $sql);
-        $id_p = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_p = $row["ID"];
 
-        $sql = "SELECT ID FROM categorias WHERE descripcion='$categoria';";
+        $sql = "SELECT ID FROM categorias WHERE nombre_categoria='$categoria';";
         $result = mysqli_query($conn, $sql);
-        $id_c = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_c = $row["ID"];
         
 
-        if ($id_p && $id_c){
-            $sql = "UPDATE productos 
-            SET 
-                ID_Proveedor = $id_p, 
-                ID_Categoria = $id_c, 
-                Nombre_Producto = '$nombre_producto', 
-                Descripcion_Producto = '$descripcion', 
-                Codigo_Barra_O_SKU = '$codigo', 
-                Precio_Unitario_Venta = $precio_u, 
-                Costo_Unitario_Adquisicion = $costo_a, 
-                Stock_Actual = $stock_a, 
-                Stock_Minimo = $stock_m, 
-                Unidad_De_Medida = '$unidad_medida' 
-            WHERE ID_Producto = $id_p";
+        if ($id_p && $id_c && $id){
+            $sql = "UPDATE productos SET ID_Proveedor=$id_p, ID_Categoria=$id_c, Nombre_Producto = '$nombre_producto',Descripcion_Producto = '$descripcion', Codigo_Barra_O_SKU = '$codigo',Precio_Unitario_Venta = $precio_u, Costo_Unitario_Adquisicion = $costo_a, Stock_Actual = $stock_a, Stock_Minimo = $stock_m, Unidad_De_Medida='$unidad_medida' WHERE ID = $id;";
+
             $result = mysqli_query($conn, $sql);
-            header("Location: listados.php");
+            header("Location: ../Principal/home.html");
         }else{
             echo "No se pudo actualizar el producto, Se necesita Categoria y Proveedor";
         }
@@ -426,15 +569,10 @@
         $tiempo_entrega_avg = $tiempo_entrega_date->diff($today_obj);
         $avg = $tiempo_entrega_avg->days;
 
-        $sql = "UPDATE Proveedores 
-          SET 
-            Nombre_Empresa = '$nombre_empresa', 
-            Direccion = '$direccion', 
-            Tiempo_Entrega_Promedio = $avg, 
-            Estado = 'Activo' 
-          WHERE ID_Proveedor = $id";
+        $sql = "UPDATE Proveedores (Nombre_Empresa, Direccion, Tiempo_Entrega_Promedio, Estado) VALUES ('$nombre_empresa', '$direccion', $avg, 'Activo') WHERE ID=$id";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+        header("Location: ../Principal/home.html");
+        
       }
       function actualizarContactos($conn, $id){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
@@ -442,29 +580,31 @@
         $telefono = isset($_POST["telefono_contacto"]) ? htmlspecialchars($_POST["telefono_contacto"]) : null;
         $correo = isset($_POST["correo"]) ? htmlspecialchars($_POST["correo"]) : null;
 
-         $sql = "UPDATE Proveedores_Contactos 
-                SET 
-                    Nombre_Contacto = '$nombre_contacto', 
-                    Telefono_Contacto = '$telefono', 
-                    Correo_Contacto = '$correo' 
-                WHERE ID_Contacto = $id";
+        $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $id_p = (int)mysqli_fetch_assoc($result);
+
+        $sql = "UPDATE Proveedores_Contactos (ID_Proveedor, Nombre_Contacto, Telefono_Contacto, Correo_Contacto) VALUES ($id_p, '$nombre_contacto', '$telefono', '$correo') WHERE ID=$id";
         
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+            header("Location: ../Principal/home.html");
+        
       }
-      function actualizarCondicionPago($conn){
+      function actualizarCondicionPago($conn, $id){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
-        $sql = "UPDATE condiciones_pago(descripcion) SET descripcion='$descripcion' WHERE ID);";
+        $sql = "UPDATE condiciones_pago(descripcion) VALUES ('$descripcion') WHERE ID=$id";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+            header("Location: ../Principal/home.html");
+        
       }
-      function actualizarCategoria($conn){
+      function actualizarCategoria($conn, $id){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
-        $sql = "UPDATE categorias(descripcion) VALUES ('$descripcion');";
+        $sql = "UPDATE categorias(descripcion) VALUES ('$descripcion') WHERE ID=$id";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+            header("Location: ../Principal/home.html");
+        
       }
-      function actualizarArticulo($conn){
+      function actualizarArticulo($conn, $id){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $nombre_producto = isset($_POST["nombre_producto"]) ? htmlspecialchars($_POST["nombre_producto"]) : null;
         
@@ -477,33 +617,33 @@
         $id_pr = (int)mysqli_fetch_assoc($result);
         
         if ($id_p && $id_pr){
-            $sql = "UPDATE articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
+            $sql = "UPDATE articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr) WHERE ID=$id";
             $result = mysqli_query($conn, $sql);
-            header("Location: listados.php");
+            header("Location: ../Principal/home.html");
+            
         }
 
       }
 
-      if ($_SERVER['REQUEST_METHOD'] == "POST"){
-        if (isset($_POST["table"])) {
-          switch (strtolower($_POST["table"])){
+       if (isset($_GET["table"])) {
+          switch (strtolower($_GET["table"])){
             case "proveedores":
-              formProveedor($server);
+              formProveedor($server, $id, $conn);
               break;
             case "contactos":
-              formContacto($server, $options);
+              formContacto($server, $options, $id, $conn);
               break;
             case "condiciones_pago":
-              formCondicionPago($server);
+              formCondicionPago($server, $id, $conn);
               break;
             case "productos":
-              formProducto($server, $options, $categories);
+              formProducto($server, $options, $categories, $id, $conn);
               break;
             case "categorias":
-              formCategorias($server);
+              formCategorias($server, $id, $conn);
               break;
             case "articulos_ofrecidos":
-              formArticulos($server, $options, $categories);
+              formArticulos($server, $options, $categories, $id, $conn);
               break;
             default:
               echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
@@ -514,29 +654,28 @@
         if (isset($_POST["createData"]) && isset($_GET["id"])){
             switch($_POST["createTable"]) {
                 case "proveedores":
-                    actualizarProveedor($conn, $_GET["id"]);
+                    actualizarProveedor($conn, $_POST["id"]);
                     break;
                 case "contactos":
-                    actualizarContactos($conn, $_GET["id"]);
+                    actualizarContactos($conn, $_POST["id"]);
                     break;
                 case "condiciones_pago":
-                    actualizarCondicionPago($conn);
+                    actualizarCondicionPago($conn, $_POST["id"]);
                     break;
                 case "productos":
-                    actualizarProducto($conn);
+                    actualizarProducto($conn, $_POST["id"]);
                     break;
                 case "categorias":
-                    actualizarCategoria($conn);
+                    actualizarCategoria($conn, $_POST["id"]);
                     break;
                 case "articulos_ofrecidos":
-                    actualizarArticulo($conn);
+                    actualizarArticulo($conn, $_POST["id"]);
                     break;
                 default:
                     echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
                     break;
             }
         }
-      }
     ?>
   
   </div>

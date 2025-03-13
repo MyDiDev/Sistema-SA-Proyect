@@ -1,5 +1,5 @@
 <?php 
-include('conn.php');
+include('../Datos/conn.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,6 @@ include('conn.php');
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -21,7 +20,8 @@ include('conn.php');
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../Estilos/style.css" />
+
   </head>
   <body>
     <div
@@ -87,8 +87,8 @@ include('conn.php');
                     <td>$stock_m</td>
                     <td>$unidad</td>
 
-                    <td><a href=\"delete.php\">Eliminar</a></td>
-                    <td><a href=\"update.php\">Editar</a></td>
+                    <td><a href=\"../CRUD/delete.php?id=$id&table=productos&id_col=ID\">Eliminar</a></td>
+                    <td><a href=\"../CRUD/update.php?di=$id&table=productos\">Editar</a></td>
                   </tr>
               ";
             }
@@ -107,96 +107,197 @@ include('conn.php');
                 <thead>
                   <th>N.</th>
                   <th>PROVEEDOR</th>
-                  <th>CATEGORIA</th>
-                  <th>PRODUCTO</th>
-                  <th>DESCRIPCION</th>
-                  <th>CODIGO SKU</th>
-                  <th>PRECIO UNITARIO</th>
-                  <th>COSTO UNITARIO</th>
-                  <th>STOCK ACTUAL</th>
-                  <th>STOCK MINIMO</th>
-                  <th>UNIDAD DE MEDIDA</th>
-
                   <th></th>
                   <th></th>
                 </thead>
                 <tbody>
-              ";
+            ";
+
             while ($row = mysqli_fetch_assoc($result)){
                 $id = $row["ID"];
-                $proveedor = $row["Nombre_Empresa"];
-                $categoria = $row["Nombre_Categoria"];
-                $producto = $row["Nombre_Producto"];
-                $desc = $row["Descripcion_Producto"];
-                $codigo = $row["Codigo_Barra_O_SKU"];
-                $precio = $row["Precio_Unitario_Venta"];
-                $costo = $row["Costo_Unitario_Adquisicion"];
-                $stock_a = $row["Stock_Actual"];
-                $stock_m = $row["Stock_Minimo"];
-                $unidad = $row["Unidad_De_Medida"];
+                $categoria = $row["nombre_categoria"];
+
                 echo"
                     <tr>
                       <td>$id</td>
-                      <td>$proveedor</td>
-                      <td>$categoria</td>
-                      <td>$producto</td>
-                      <td>$desc</td>
-                      <td>$codigo</td>
-                      <td>$precio</td>
-                      <td>$costo</td>
-                      <td>$stock_a</td>
-                      <td>$stock_m</td>
-                      <td>$unidad</td>
-
-                      <td><a href=\"delete.php\">Eliminar</a></td>
-                      <td><a href=\"update.php\">Editar</a></td>
+                      <td>$categoria</td>    
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=categorias&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/update.php?di=$id&table=categorias\">Editar</a></td>
                     </tr>
                 ";
             }
+
             echo "
               </tbody>
             </table>
             ";
-        }   
+        }
 
         function showCondicionesPagoTable($conn){
-            $sql = "SELECT * FROM condiciones_pago;";
+            $sql = "SELECT * FROM condiciones_pago";
             $result = mysqli_query($conn, $sql);
 
+            echo "
+              <table class=\"table table-striped table-hover\">
+                <thead>
+                  <th>N.</th>
+                  <th>DESCRIPCION</th>
+                  <th></th>
+                  <th></th>
+                </thead>
+                <tbody>
+            ";
+
             while ($row = mysqli_fetch_assoc($result)){
-                // create table
+                $id = $row["ID"];
+                $descripcion = $row["Descripcion"];
+
+                echo"
+                    <tr>
+                      <td>$id</td>
+                      <td>$descripcion</td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=condiciones_pago&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/update.php?di=$id&table=condiciones_pago\">Editar</a></td>
+                    </tr>
+                ";
             }
-        }   
+
+            echo "
+              </tbody>
+            </table>
+            ";
+        }
 
         function showArticulosTable($conn){
-          $sql = "SELECT * FROM articulos_ofrecidos";
-          $result = mysqli_query($conn, $sql);
+            $sql = "SELECT * FROM articulos_ofrecidos";
+            $result = mysqli_query($conn, $sql);
 
-          while ($row = mysqli_fetch_assoc($result)){
-            // create table
-          }
-        }   
+            echo "
+              <table class=\"table table-striped table-hover\">
+                <thead>
+                  <th>N.</th>
+                  <th>PROVEEDOR</th>
+                  <th>PRODUCTO</th>
+                  <th></th>
+                  <th></th>
+                </thead>
+                <tbody>
+            ";
+
+            while ($row = mysqli_fetch_assoc($result)){
+                $id = $row["ID"];
+                $proveedor = $row["ID_Proveedor"];
+                $producto = $row["ID_Producto"];
+
+                echo"
+                    <tr>
+                      <td>$id</td>
+                      <td>$proveedor</td>
+                      <td>$producto</td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=articulos_ofrecidos&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/update.php?di=$id&table=articulos_ofrecidos\">Editar</a></td>
+                    </tr>
+                ";
+            }
+
+            echo "
+              </tbody>
+            </table>
+            ";
+        }
 
         function showContactosTable($conn){
             $sql = "SELECT * FROM contactos";
             $result = mysqli_query($conn, $sql);
 
+            echo "
+              <table class=\"table table-striped table-hover\">
+                <thead>
+                  <th>N.</th>
+                  <th>PROVEEDOR</th>
+                  <th>CONTACTO</th>
+                  <th>TELEFONO</th>
+                  <th>CORREO</th>
+                  <th></th>
+                  <th></th>
+                </thead>
+                <tbody>
+            ";
+
             while ($row = mysqli_fetch_assoc($result)){
-                // create table
+                $id = $row["ID"];
+                $proveedor = $row["ID_Proveedor"];
+                $contacto = $row["Nombre_Contacto"];
+                $telefono = $row["Telefono_Contacto"];
+                $correo = $row["Correo_Contacto"];
+
+                echo"
+                    <tr>
+                      <td>$id</td>
+                      <td>$proveedor</td>
+                      <td>$contacto</td>
+                      <td>$telefono</td>
+                      <td>$correo</td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=contactos&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/update.php?di=$id&table=contactos\">Editar</a></td>
+                    </tr>
+                ";
             }
-        }   
+
+            echo "
+              </tbody>
+            </table>
+            ";
+        }
+
 
         function showProveedoresTable($conn){
-            $sql = "SELECT * FROM proveedores";
-            $result = mysqli_query($conn, $sql);
+          $sql = "SELECT * FROM proveedores";
+          $result = mysqli_query($conn, $sql);
 
-            while ($row = mysqli_fetch_assoc($result)){
-                // create table
-            }
-        }   
+          echo "
+            <table class=\"table table-striped table-hover\">
+              <thead>
+                <th>N.</th>
+                <th>PROVEEDOR</th>
+                <th>DIRECCION</th>
+                <th>TIEMPO ENTREGA PROMEDIO</th>
+                <th>ESTADO</th>
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+          ";
 
-        // Show table with data from the tables in phpMyAdmin
-        if (isset($_POST["table"])){
+          while ($row = mysqli_fetch_assoc($result)){
+              $id = $row["ID"];
+              $proveedor = $row["Nombre_Empresa"];
+              $direccion = $row["Direccion"];
+              $tiempo_promedio = $row["Tiempo_Entrega_Promedio"];
+              $estado = $row["Estado"];
+
+              echo"
+                  <tr>
+                    <td>$id</td>
+                    <td>$proveedor</td>
+                    <td>$direccion</td>
+                    <td>$proveedor</td>
+                    <td>$tiempo_promedio</td>
+                    <td>$estado</td>
+                    <td><a href=\"../CRUD/delete.php?id=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
+                    <td><a href=\"../CRUD/update.php?di=$id&table=proveedores\">Editar</a></td>
+                  </tr>
+              ";
+          }
+
+          echo "
+            </tbody>
+          </table>
+          ";
+        } 
+
+
+      if (isset($_POST["table"])){
             switch (strtolower($_POST["table"])){
                 case "proveedores":
                   showProveedoresTable($conn);
