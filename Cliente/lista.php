@@ -39,7 +39,7 @@
                 <th>CODIGO SKU</th>
                 <th>PRECIO UNITARIO</th>
                 <th>COSTO UNITARIO</th>
-                <th>STOCK ACTUAL</th>
+                <th>STOCK ACTUAL</th>zz
                 <th>STOCK MINIMO</th>
                 <th>UNIDAD DE MEDIDA</th>
 

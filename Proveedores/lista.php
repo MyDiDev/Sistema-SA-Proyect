@@ -22,51 +22,7 @@
 </head>
 <body>
     <?php 
-      if($_SERVER['REQUEST_METHOD'] == "POST"){
-        
-      }else{
-        $sql = "SELECT * FROM proveedores";
-        $result = mysqli_query($conn, $sql);
-
-        echo "
-          <table class=\"table table-striped table-hover\">
-            <thead>
-              <th>N.</th>
-              <th>PROVEEDOR</th>
-              <th>DIRECCION</th>
-              <th>TIEMPO ENTREGA PROMEDIO</th>
-              <th>ESTADO</th>
-              <th></th>
-              <th></th>
-            </thead>
-            <tbody>
-        ";
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $id = $row["ID"]; 
-            $proveedor = $row["Nombre_Empresa"];
-            $direccion = $row["Direccion"];
-            $tiempo_entrega = $row["Tiempo_Entrega_Promedio"];
-            $estado = $row["Estado"];
-
-            echo "
-              <tr>
-                <td>$id</td>
-                <td>$proveedor</td>
-                <td>$direccion</td>
-                <td>$tiempo_entrega</td>
-                <td>$estado</td>
-                <td><a href=\"../UD/delete.php?id=$id\">Eliminar</a></td>
-                <td><a href=\"actualizar.php?id=$id\">Editar</a></td>
-              </tr>
-            ";
-        }
-
-        echo "
-          </tbody>
-        </table>
-        ";
-      }
+      
     ?>
 </body>
 </html>
