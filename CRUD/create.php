@@ -6,8 +6,7 @@ include('conn.php');
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register <php>Productos</php></title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Register <?php echo $_POST["table"]; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +20,7 @@ include('conn.php');
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../Estilos/style.css" />
   </head>
   <body>
     <div
@@ -453,7 +452,7 @@ include('conn.php');
           $sql = "INSERT INTO productos(ID_Proveedor, ID_Categoria, Nombre_Producto, Descripcion_Producto, Codigo_Barra_O_SKU, Precio_Unitario_Venta, Costo_Unitario_Adquisicion, Stock_Actual, Stock_Minimo, Unidad_De_Medida)  VALUES ($id_p, $id_c, '$nombre_producto', '$descripcion', '$codigo', $precio_u, $costo_a, $stock_a, $stock_m, '$unidad_medida')";
 
           $result = mysqli_query($conn, $sql);
-          header("Location: listados.php");
+          header("Location: ../Principal/home.html");
         }else{
           echo "No se pudo agregar el producto, Se necesita Categoria y Proveedor";
         }
@@ -472,7 +471,7 @@ include('conn.php');
 
         $sql = "INSERT INTO Proveedores (Nombre_Empresa, Direccion, Tiempo_Entrega_Promedio, Estado) VALUES ('$nombre_empresa', '$direccion', $avg, 'Activo');";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+        header("Location: ../Principal/home.html");
       }
       
       function agregarContactos($conn){
@@ -488,21 +487,21 @@ include('conn.php');
         $sql = "INSERT INTO contactos (ID_Proveedor, Nombre_Contacto, Telefono_Contacto, Correo_Contacto) VALUES ($id_p, '$nombre_contacto', '$telefono', '$correo')";
         
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+        header("Location: ../Principal/home.html");
       }
       
       function agregarCondicionPago($conn){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
         $sql = "INSERT INTO condiciones_pago(descripcion) VALUES ('$descripcion');";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+        header("Location: ../Principal/home.html");
       }
       
       function agregarCategoria($conn){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
         $sql = "INSERT INTO categorias(Nombre_Categoria) VALUES ('$descripcion');";
         $result = mysqli_query($conn, $sql);
-        header("Location: listados.php");
+        header("Location: ../Principal/home.html");
       }
       
       function agregarArticulo($conn){
@@ -522,7 +521,7 @@ include('conn.php');
         if ($id_p && $id_pr){
           $sql = "INSERT INTO articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
           $result = mysqli_query($conn, $sql);
-          header("Location: listados.php");
+          header("Location: ../Principal/home.html");
         }
 
       }
