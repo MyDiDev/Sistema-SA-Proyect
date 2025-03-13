@@ -384,7 +384,7 @@
         }else{
             echo "No se pudo actualizar el producto, Se necesita Categoria y Proveedor";
         }
-     }
+      }
       function actualizarProveedor($conn){
         $nombre_empresa = isset($_POST["nombre_empresa"]) ? htmlspecialchars($_POST["nombre_empresa"]) : null;
         $direccion = isset($_POST["direccion"]) ? htmlspecialchars($_POST["direccion"]) : null;
@@ -446,7 +446,6 @@
         }
 
       }
-
 
       if ($_SERVER['REQUEST_METHOD'] == "POST"){
         if (isset($_POST["table"])) {

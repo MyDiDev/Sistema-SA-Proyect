@@ -26,75 +26,69 @@
         <h2>Sistema S.A</h2>
         <hr class="w-100" color="black" size="7px" align="center" />
         <div class="d-f">
-          <a id="link" onclick="showProductCard()" class="btn p-3 mb-3 w-100">
-            Productos
-          </a>
-          <a id="link" onclick="showProviderCard()" class="btn p-3 mb-3 w-100">
-            Proveedores</a
-          ><a id="link" href="CRUD/listados.php" class="btn p-3 mb-3 w-100">
-            Listados
-          </a>
-        </div>
-      </div>
-      <div
-        data-aos="fade-up"
-        style="display: none"
-        class="w-50 p-3 rounded"
-        id="productCard"
-      >
-        <h2>Productos <i class="fa-solid fa-cart-shopping"></i></h2>
-        <hr class="w-100" size="7px" color="black" />
-        <div class="d-f">
-          <form action="CRUD/create.php" method="POST">
-            <button class="btn w-100 p-3" id="#button">
-              Agregar Nuevo Producto
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div
-        data-aos="fade-up"
-        style="display: none"
-        class="w-50 p-3 rounded"
-        id="providerCard"
-      >
-        <h2>Proveedores <i class="fa-solid fa-cart-shopping"></i></h2>
-        <hr class="w-100" size="7px" color="black" />
-        <div class="d-f">
-          <form action="CRUD/create.php" method="POST">
-            <button
-              class="btn w-100 p-3"
-              style="font-weight: bold; background-color: #282f39; color: white"
+          <div class="row">
+            <div class="col">
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="productos" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Productos
+                </button>
+              </form>
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="proveedores" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Proveedores
+                </button>
+              </form>
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="categorias" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Categorias
+                </button>
+              </form>
+            </div>
+            <div class="col">
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="contactos" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Contacto
+                </button>
+              </form>
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="condiciones_pago" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Condicion de Pago
+                </button>
+              </form>
+              <form action="CRUD/create.php" method="POST">
+                <input type="hidden" name="table" value="articulos_ofrecidos" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Articulo Ofrecido
+                </button>
+              </form>
+            </div>
+          </div>
+          <form action="" method="POST">
+            <select
+              class="form-control mb-3 p-3"
+              name="table"
+              style="background-color: #202a34; border: none; color: white"
             >
-              Agregar Nuevo Proveedor
+              <option value="proveedores">proveedores</option>
+              <option value="productos">productos</option>
+              <option value="contactos">contactos</option>
+              <option value="condiciones_pago">condiciones de pago</option>
+              <option value="categorias">categorias</option>
+              <option value="articulos_ofrecidos">articulos ofrecidos</option>
+            </select>
+            <button id="link" type="submit" class="btn p-3 w-100">
+              Listados
             </button>
           </form>
         </div>
       </div>
     </div>
 
-    <script>
-      function showProductCard() {
-        const productCard = document.getElementById("productCard");
-        const mainCard = document.getElementById("mainCard");
-
-        mainCard.style.display = "none";
-        productCard.style.display = "block";
-        productCard.style.backgroundColor = "#2b3543";
-        productCard.style.border = "none";
-      }
-
-      function showProviderCard() {
-        const providerCard = document.getElementById("providerCard");
-        const mainCard = document.getElementById("mainCard");
-
-        mainCard.style.display = "none";
-        providerCard.style.display = "block";
-        providerCard.style.backgroundColor = "#2b3543";
-        providerCard.style.border = "none";
-      }
-    </script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

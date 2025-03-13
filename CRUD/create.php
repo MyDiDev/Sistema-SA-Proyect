@@ -1,3 +1,6 @@
+<?php 
+include('conn.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -31,23 +34,54 @@
       "
     >
     <?php
-      function formCategorias(){
+      $server = $_SERVER['PHP_SELF'];
+  
+      $options = "";
+      $categories = "";
+      
+      getAllProveedores($conn);
+      getAllCategories($conn);
+
+      function getAllProveedores($conn){
+        global $options;
+        $sql = "SELECT nombre_empresa FROM proveedores WHERE estado='Activo';";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $proveedor = $row["nombre_empresa"];
+          $options .= "<option value=\"$proveedor\">$proveedor</option>";
+        }
+      }
+
+      function getAllCategories($conn){
+        global $categories;
+        $sql = "SELECT nombre_categoria FROM categorias;";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $categorie = $row["nombre_categoria"];
+          $categories .= "<option value=\"$categorie\">$categorie</option>";
+        }
+      }
+
+      function formCategorias($server){
         echo <<<EOD
-          <form action="" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Categoria</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="categorias">
           <br />
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label for="" class="form-label">Nombre de la Categoria:</label>
+                <label for="desc" class="form-label">Nombre de la Categoria:</label>
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
-                  name="nombre"
+                  name="desc"
                   rows="3"
-                  id="nombre"
+                  id="desc"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -55,17 +89,18 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formContacto(){
+      function formContacto($server, $options){
         echo <<<EOD
-        <form action="" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Contacto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="contactos">
           <br />
           <div class="row">
             <div class="col">
@@ -79,11 +114,11 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
-                  <option value="null">...</option>
+                  $options
                 </select>
               </div>
               <div class="mb-3">
-                <label for="" class="form-label">Nombre del Contacto:</label>
+                <label for="nombre" class="form-label">Nombre del Contacto:</label>
                 <input
                   type="text"
                   class="form-control"
@@ -96,13 +131,13 @@
               </div>
 
               <div class="mb-3">
-                <label for="" class="form-label">Telefono del Contacto:</label>
+                <label for="telefono_contacto" class="form-label">Telefono del Contacto:</label>
                 <input
                   type="text"
                   class="form-control"
-                  name="telefono"
+                  name="telefono_contacto"
                   rows="3"
-                  id="telefono"
+                  id="telefono_contacto"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -123,17 +158,19 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
     
-      function formCondicionPago(){
+      function formCondicionPago($server){
+
         echo <<<EOD
-        <form action="" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Condicion de Pago</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="condiciones_pago">
           <br />
           <div class="row">
             <div class="col">
@@ -149,17 +186,18 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formProveedor(){
+      function formProveedor($server){
         echo <<<EOD
-        <form action="" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Proveedor</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="proveedores">
           <br />
           <div class="row">
             <div class="col">
@@ -168,7 +206,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="proveedor"
+                  name="nombre_empresa"
                   id="provider"
                   style="background-color: #151c26; border: none; color: white"
                   required
@@ -179,7 +217,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  name="desc"
+                  name="direccion"
                   id="desc"
                   style="background-color: #151c26; border: none; color: white"
                   required
@@ -190,8 +228,8 @@
                 <input
                   type="date"
                   class="form-control"
-                  name="codigo_sku"
-                  id="codigo_sku"
+                  name="tiempo_entrega"
+                  id="tiempo_entrega"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -202,29 +240,32 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
-
-      function formProducto(){
+      
+      function formProducto($server,$proveedores, $categorias){
         echo <<<EOD
-        <form action="" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Producto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="productos">
           <br />
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label for="" class="form-label">Proveedor:</label>
+                <label for="proveedor" class="form-label">Proveedor:</label>
                 <select
                   class="form-control"
                   name="proveedor"
                   id="provider"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
+                  $proveedores
+                </select>
               </div>
               <div class="mb-3">
                 <label for="desc" class="form-label">Descripcion:</label>
@@ -238,35 +279,40 @@
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Codigo SKU:</label>
-                <select
+                <input
+                  type="text"
                   class="form-control"
-                  name="codigo_sku"
-                  id="codigo_sku"
+                  name="codigo"
+                  id="codigo"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
               </div>
               <div class="mb-3">
                 <label for="costo_a" class="form-label"
                   >Costo de Adquisicion:</label
                 >
-                <select
+                <input
+                  type="number"
                   class="form-control"
                   name="costo_a"
                   id="costo_a"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
               </div>
               <div class="mb-3">
-                <label for="proveedor" class="form-label">Proveedor:</label>
-                <select
+                <label for="unidad_medida" class="form-label"
+                  >Unidad de Medida:</label
+                >
+                <input
+                  type="text"
                   class="form-control"
-                  name="proveedor"
-                  id="proveedor"
+                  name="unidad_medida"
+                  id="unidad_medida"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                />
               </div>
             </div>
             <div class="col">
@@ -291,11 +337,14 @@
                   id="categoria"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
+                  $categorias
+                </select>
               </div>
               <div class="mb-3">
                 <label for="precio_u" class="form-label">Precio Unitario:</label>
                 <input
+                  type="number"
                   class="form-control"
                   name="precio_u"
                   id="precio_u"
@@ -304,25 +353,23 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="stock_actual" class="form-label">Stock Actual</label>
+                <label for="stock_a" class="form-label">Stock Actual</label>
                 <input
                   type="number"
                   class="form-control"
-                  name="stock_actual"
-                  id="stock_actual"
+                  name="stock_a"
+                  id="stock_a"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label for="unidad_medida" class="form-label"
-                  >Unidad de Medida:</label
-                >
+                <label for="stock_m" class="form-label">Stock Minimo</label>
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
-                  name="unidad_medida"
-                  id="unidad_medida"
+                  name="stock_m"
+                  id="stock_m"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -330,17 +377,54 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formArticulos(){
+      function formArticulos($server, $proveedores, $categorias){
         echo <<<EOD
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+          <h2>Registra un Contacto</h2>
 
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="contactos">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="" class="form-label">Proveedor:</label>
+                <select
+                  class="form-control"
+                  name="proveedor"
+                  rows="3"
+                  id="proveedor"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $proveedores
+                </select>
+              </div>
+              <div class="mb-3">
+               <label for="categoria" class="form-label">Categoria:</label>
+                <select
+                  class="form-control"
+                  name="categoria"
+                  rows="3"
+                  id="categoria"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $categorias
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
         EOD;
       }
-
 
       function agregarProducto($conn){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
@@ -357,21 +441,24 @@
 
         $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
         $result = mysqli_query($conn, $sql);
-        $id_p = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_p = $row["ID"];
 
-        $sql = "SELECT ID FROM categorias WHERE descripcion='$categoria';";
+        $sql = "SELECT ID FROM categorias WHERE nombre_categoria='$categoria';";
         $result = mysqli_query($conn, $sql);
-        $id_c = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_c = $row["ID"];
         
-
         if ($id_p && $id_c){
-            $sql = "INSERT INTO productos(ID_Proveedor, ID_Categoria, Nombre_Producto, Descripcion_Producto, Codigo_Barra_O_SKU, Precio_Unitario_Venta, Costo_Unitario_Adquisicion, Stock_Actual, Stock_Minimo, Unidad_De_Medida)  VALUES ($id_p, $id_c, '$nombre_producto', '$descripcion', '$codigo', $precio_u, $costo_a, $stock_a, $stock_m, '$unidad_medida')";
-            $result = mysqli_query($conn, $sql);
-            header("Location: listados.php");
+          $sql = "INSERT INTO productos(ID_Proveedor, ID_Categoria, Nombre_Producto, Descripcion_Producto, Codigo_Barra_O_SKU, Precio_Unitario_Venta, Costo_Unitario_Adquisicion, Stock_Actual, Stock_Minimo, Unidad_De_Medida)  VALUES ($id_p, $id_c, '$nombre_producto', '$descripcion', '$codigo', $precio_u, $costo_a, $stock_a, $stock_m, '$unidad_medida')";
+
+          $result = mysqli_query($conn, $sql);
+          header("Location: listados.php");
         }else{
-            echo "No se pudo agregar el producto, Se necesita Categoria y Proveedor";
+          echo "No se pudo agregar el producto, Se necesita Categoria y Proveedor";
         }
-     }
+      }
+
       function agregarProveedor($conn){
         $nombre_empresa = isset($_POST["nombre_empresa"]) ? htmlspecialchars($_POST["nombre_empresa"]) : null;
         $direccion = isset($_POST["direccion"]) ? htmlspecialchars($_POST["direccion"]) : null;
@@ -387,6 +474,7 @@
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
+      
       function agregarContactos($conn){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $nombre_contacto = isset($_POST["nombre"]) ? htmlspecialchars($_POST["nombre"]) : null;
@@ -395,41 +483,46 @@
 
         $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
         $result = mysqli_query($conn, $sql);
-        if ($result) $id_p = (int)mysqli_fetch_assoc($result);
+        if ($result) $row = mysqli_fetch_assoc($result); $id_p =$row["ID"];
 
-        $sql = "INSERT INTO Proveedores_Contactos (ID_Proveedor, Nombre_Contacto, Telefono_Contacto, Correo_Contacto) VALUES ($id_p, '$nombre_contacto', '$telefono', '$correo')";
+        $sql = "INSERT INTO contactos (ID_Proveedor, Nombre_Contacto, Telefono_Contacto, Correo_Contacto) VALUES ($id_p, '$nombre_contacto', '$telefono', '$correo')";
         
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
+      
       function agregarCondicionPago($conn){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
         $sql = "INSERT INTO condiciones_pago(descripcion) VALUES ('$descripcion');";
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
+      
       function agregarCategoria($conn){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
-        $sql = "INSERT INTO categorias(descripcion) VALUES ('$descripcion');";
+        $sql = "INSERT INTO categorias(Nombre_Categoria) VALUES ('$descripcion');";
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
+      
       function agregarArticulo($conn){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $nombre_producto = isset($_POST["nombre_producto"]) ? htmlspecialchars($_POST["nombre_producto"]) : null;
         
         $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
         $result = mysqli_query($conn, $sql);
-        $id_p = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_p = $row["ID"];
 
         $sql = "SELECT ID FROM productos WHERE nombre_producto='$nombre_producto';";
         $result = mysqli_query($conn, $sql);
-        $id_pr = (int)mysqli_fetch_assoc($result);
+        $row = mysqli_fetch_assoc($result);
+        $id_pr = $row["ID"];
         
         if ($id_p && $id_pr){
-            $sql = "INSERT INTO articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
-            $result = mysqli_query($conn, $sql);
-            header("Location: listados.php");
+          $sql = "INSERT INTO articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
+          $result = mysqli_query($conn, $sql);
+          header("Location: listados.php");
         }
 
       }
@@ -438,56 +531,60 @@
         if (isset($_POST["table"])) {
           switch (strtolower($_POST["table"])){
             case "proveedores":
-              formProveedor();
+              formProveedor($server);
               break;
             case "contactos":
-              formContacto();
+              formContacto($server, $options);
               break;
             case "condiciones_pago":
-              formCondicionPago();
+              formCondicionPago($server);
               break;
             case "productos":
-              formProducto();
+              formProducto($server, $options, $categories);
               break;
             case "categorias":
-              formCategorias();
+              formCategorias($server);
               break;
             case "articulos_ofrecidos":
-              formArticulos();
+              formArticulos($server, $options, $categories);
               break;
             default:
               echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron Datos suficientes</div>";
               break;
           }
         }
-
-        if (isset($_POST["createData"])){
-          if(isset($_POST["createTable"])){
-             switch($_POST["creatTable"]) {
-                case "proveedores":
-                    agregarProveedor($conn);
-                    break;
-                case "contactos":
-                    agregarContactos($conn);
-                    break;
-                case "condiciones_pago":
-                    agregarCondicionPago($conn);
-                    break;
-                case "productos":
-                    agregarProducto($conn);
-                    break;
-                case "categorias":
-                    agregarCategoria($conn);
-                    break;
-                case "articulos_ofrecidos":
-                    agregarArticulo($conn);
-                    break;
-                default:
-                    echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
-                    break;
+        elseif(isset($_POST["createTable"])){
+            session_start();
+            switch(strtolower($_POST["createTable"])) {
+              case "proveedores":
+                $_SESSION["table"] = "proveedores";
+                agregarProveedor($conn);
+                break;
+              case "contactos":
+                $_SESSION["table"] = "contactos";
+                agregarContactos($conn);
+                break;
+              case "condiciones_pago":
+                $_SESSION["table"] = "condiciones_pago";
+                agregarCondicionPago($conn);
+                break;
+              case "productos":
+                $_SESSION["table"] = "productos";
+                agregarProducto($conn);
+                break;
+              case "categorias":
+                $_SESSION["table"] = "categorias";
+                agregarCategoria($conn);
+                break;
+              case "articulos_ofrecidos":
+                $_SESSION["table"] = "articulos_ofrecidos";
+                agregarArticulo($conn);
+                break;
+              default:
+                echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
+                break;
             }
           }
-        }
       }
     ?>
   
