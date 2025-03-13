@@ -31,26 +31,53 @@
       "
     >
     <?php
-      function formCategorias(){
+      $server = $_SERVER['PHP_SELF'];
+  
+      $options = "";
+      $categories = "";
+      
+      getAllProveedores($conn);
+      getAllCategories($conn);
+
+      function getAllProveedores($conn){
+        global $options;
+        $sql = "SELECT nombre_empresa FROM proveedores WHERE estado='Activo';";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $proveedor = $row["nombre_empresa"];
+          $options .= "<option value=\"$proveedor\">$proveedor</option>";
+        }
+      }
+
+      function getAllCategories($conn){
+        global $categories;
+        $sql = "SELECT nombre_categoria FROM categorias;";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $categorie = $row["nombre_categoria"];
+          $categories .= "<option value=\"$categorie\">$categorie</option>";
+        }
+      }
+
+      function formCategorias($server){
         echo <<<EOD
-          <form action="<?php echo \$_SERVER['PHP_SELF'] ?>" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Categoria</h2>
-
           <hr class="w-100 mt-4" color="black" size="7px" />
-          <input type="hidden" name="createData" value="1">
-          <input type="hidden" name="createTable" value="categoria">
-
+          <input type="hidden" name="createTable" value="categorias">
           <br />
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label for="" class="form-label">Nombre de la Categoria:</label>
+                <label for="desc" class="form-label">Nombre de la Categoria:</label>
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
-                  name="nombre"
+                  name="desc"
                   rows="3"
-                  id="nombre"
+                  id="desc"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -58,21 +85,19 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formContacto(){
+      function formContacto($server, $options){
         echo <<<EOD
-        <form action="<?php echo \$_SERVER['PHP_SELF'] ?>" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Contacto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="contactos">
           <br />
-          <input type="hidden" name="createData" value="1">
-          <input type="hidden" name="createTable" value="contacto">
-
           <div class="row">
             <div class="col">
               <div class="mb-3">
@@ -85,11 +110,11 @@
                   style="background-color: #151c26; border: none; color: white"
                   required
                 >
-                  <option value="null">...</option>
+                  $options
                 </select>
               </div>
               <div class="mb-3">
-                <label for="" class="form-label">Nombre del Contacto:</label>
+                <label for="nombre" class="form-label">Nombre del Contacto:</label>
                 <input
                   type="text"
                   class="form-control"
@@ -102,13 +127,13 @@
               </div>
 
               <div class="mb-3">
-                <label for="" class="form-label">Telefono del Contacto:</label>
+                <label for="telefono_contacto" class="form-label">Telefono del Contacto:</label>
                 <input
                   type="text"
                   class="form-control"
-                  name="telefono"
+                  name="telefono_contacto"
                   rows="3"
-                  id="telefono"
+                  id="telefono_contacto"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -129,19 +154,19 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
     
-      function formCondicionPago(){
+      function formCondicionPago($server){
+
         echo <<<EOD
-        <form action="<?php echo \$_SERVER['PHP_SELF'] ?>" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra una Condicion de Pago</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
-          <input type="hidden" name="createData" value="1">
-          <input type="hidden" name="createTable" value="condicion_pago">
+          <input type="hidden" name="createTable" value="condiciones_pago">
           <br />
           <div class="row">
             <div class="col">
@@ -157,88 +182,38 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formProveedor(){
+      function formProveedor($server){
         echo <<<EOD
-        <form action="<?php echo \$_SERVER['PHP_SELF'] ?>" class="w-75 p-3 rounded shadow mt-5 mb-5">
-          <h2>Registra un Proveedor</h2>
-
-          <hr class="w-100 mt-4" color="black" size="7px" />
-          <br />
-          <input type="hidden" name="createData" value="1">
-          <input type="hidden" name="createTable" value="proveedor">
-
-          <div class="row">
-            <div class="col">
-              <div class="mb-3">
-                <label for="" class="form-label">Nombre de la Empresa:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="proveedor"
-                  id="provider"
-                  style="background-color: #151c26; border: none; color: white"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="desc" class="form-label">Direccion:</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  name="desc"
-                  id="desc"
-                  style="background-color: #151c26; border: none; color: white"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <label for="" class="form-label">Fecha de Entrega:</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  name="codigo_sku"
-                  id="codigo_sku"
-                  style="background-color: #151c26; border: none; color: white"
-                  required
-                />
-              </div>
-              <div class="mb-3">
-                <input type="hidden" name="estado" value="Activo" />
-              </div>
-            </div>
-          </div>
-          <br />
-          <button class="btn w-100" id="button">Registrar</button>
-        </form>
+      
         EOD;
       }
-
-      function formProducto(){
+      
+      function formProducto($server,$proveedores, $categorias){
         echo <<<EOD
-        <form action="<?php echo \$_SERVER['PHP_SELF'] ?>" class="w-75 p-3 rounded shadow mt-5 mb-5">
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
           <h2>Registra un Producto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
-          <br />
-          <input type="hidden" name="createData" value="1">
           <input type="hidden" name="createTable" value="productos">
-          
+          <br />
           <div class="row">
             <div class="col">
               <div class="mb-3">
-                <label for="" class="form-label">Proveedor:</label>
+                <label for="proveedor" class="form-label">Proveedor:</label>
                 <select
                   class="form-control"
                   name="proveedor"
                   id="provider"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
+                  $proveedores
+                </select>
               </div>
               <div class="mb-3">
                 <label for="desc" class="form-label">Descripcion:</label>
@@ -252,35 +227,40 @@
               </div>
               <div class="mb-3">
                 <label for="" class="form-label">Codigo SKU:</label>
-                <select
+                <input
+                  type="text"
                   class="form-control"
-                  name="codigo_sku"
-                  id="codigo_sku"
+                  name="codigo"
+                  id="codigo"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
               </div>
               <div class="mb-3">
                 <label for="costo_a" class="form-label"
                   >Costo de Adquisicion:</label
                 >
-                <select
+                <input
+                  type="number"
                   class="form-control"
                   name="costo_a"
                   id="costo_a"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
               </div>
               <div class="mb-3">
-                <label for="proveedor" class="form-label">Proveedor:</label>
-                <select
+                <label for="unidad_medida" class="form-label"
+                  >Unidad de Medida:</label
+                >
+                <input
+                  type="text"
                   class="form-control"
-                  name="proveedor"
-                  id="proveedor"
+                  name="unidad_medida"
+                  id="unidad_medida"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                />
               </div>
             </div>
             <div class="col">
@@ -305,11 +285,14 @@
                   id="categoria"
                   style="background-color: #151c26; border: none; color: white"
                   required
-                ></select>
+                >
+                  $categorias
+                </select>
               </div>
               <div class="mb-3">
                 <label for="precio_u" class="form-label">Precio Unitario:</label>
                 <input
+                  type="number"
                   class="form-control"
                   name="precio_u"
                   id="precio_u"
@@ -318,25 +301,23 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="stock_actual" class="form-label">Stock Actual</label>
+                <label for="stock_a" class="form-label">Stock Actual</label>
                 <input
                   type="number"
                   class="form-control"
-                  name="stock_actual"
-                  id="stock_actual"
+                  name="stock_a"
+                  id="stock_a"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
               </div>
               <div class="mb-3">
-                <label for="unidad_medida" class="form-label"
-                  >Unidad de Medida:</label
-                >
+                <label for="stock_m" class="form-label">Stock Minimo</label>
                 <input
-                  type="text"
+                  type="number"
                   class="form-control"
-                  name="unidad_medida"
-                  id="unidad_medida"
+                  name="stock_m"
+                  id="stock_m"
                   style="background-color: #151c26; border: none; color: white"
                   required
                 />
@@ -344,17 +325,54 @@
             </div>
           </div>
           <br />
-          <button class="btn w-100" id="button">Registrar</button>
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
       }
 
-      function formArticulos(){
+      function formArticulos($server, $proveedores, $categorias){
         echo <<<EOD
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+          <h2>Registra un Contacto</h2>
 
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="contactos">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="" class="form-label">Proveedor:</label>
+                <select
+                  class="form-control"
+                  name="proveedor"
+                  rows="3"
+                  id="proveedor"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $proveedores
+                </select>
+              </div>
+              <div class="mb-3">
+               <label for="categoria" class="form-label">Categoria:</label>
+                <select
+                  class="form-control"
+                  name="categoria"
+                  rows="3"
+                  id="categoria"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $categorias
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
         EOD;
       }
-
       function actualizarProducto($conn){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $categoria = isset($_POST["categoria"]) ? htmlspecialchars($_POST["categoria"]) : null;
@@ -378,14 +396,26 @@
         
 
         if ($id_p && $id_c){
-            $sql = "UPDATE productos(ID_Proveedor, ID_Categoria, Nombre_Producto, Descripcion_Producto, Codigo_Barra_O_SKU, Precio_Unitario_Venta, Costo_Unitario_Adquisicion, Stock_Actual, Stock_Minimo, Unidad_De_Medida)  VALUES ($id_p, $id_c, '$nombre_producto', '$descripcion', '$codigo', $precio_u, $costo_a, $stock_a, $stock_m, '$unidad_medida')";
+            $sql = "UPDATE productos 
+            SET 
+                ID_Proveedor = $id_p, 
+                ID_Categoria = $id_c, 
+                Nombre_Producto = '$nombre_producto', 
+                Descripcion_Producto = '$descripcion', 
+                Codigo_Barra_O_SKU = '$codigo', 
+                Precio_Unitario_Venta = $precio_u, 
+                Costo_Unitario_Adquisicion = $costo_a, 
+                Stock_Actual = $stock_a, 
+                Stock_Minimo = $stock_m, 
+                Unidad_De_Medida = '$unidad_medida' 
+            WHERE ID_Producto = $id_p";
             $result = mysqli_query($conn, $sql);
             header("Location: listados.php");
         }else{
             echo "No se pudo actualizar el producto, Se necesita Categoria y Proveedor";
         }
       }
-      function actualizarProveedor($conn){
+      function actualizarProveedor($conn, $id){
         $nombre_empresa = isset($_POST["nombre_empresa"]) ? htmlspecialchars($_POST["nombre_empresa"]) : null;
         $direccion = isset($_POST["direccion"]) ? htmlspecialchars($_POST["direccion"]) : null;
         $tiempo_entrega = isset($_POST["tiempo_entrega"]) ? htmlspecialchars($_POST["tiempo_entrega"]) : null;
@@ -396,28 +426,35 @@
         $tiempo_entrega_avg = $tiempo_entrega_date->diff($today_obj);
         $avg = $tiempo_entrega_avg->days;
 
-        $sql = "UPDATE Proveedores (Nombre_Empresa, Direccion, Tiempo_Entrega_Promedio, Estado) VALUES ('$nombre_empresa', '$direccion', $avg, 'Activo');";
+        $sql = "UPDATE Proveedores 
+          SET 
+            Nombre_Empresa = '$nombre_empresa', 
+            Direccion = '$direccion', 
+            Tiempo_Entrega_Promedio = $avg, 
+            Estado = 'Activo' 
+          WHERE ID_Proveedor = $id";
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
-      function actualizarContactos($conn){
+      function actualizarContactos($conn, $id){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
         $nombre_contacto = isset($_POST["nombre"]) ? htmlspecialchars($_POST["nombre"]) : null;
         $telefono = isset($_POST["telefono_contacto"]) ? htmlspecialchars($_POST["telefono_contacto"]) : null;
         $correo = isset($_POST["correo"]) ? htmlspecialchars($_POST["correo"]) : null;
 
-        $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
-        $result = mysqli_query($conn, $sql);
-        if ($result) $id_p = (int)mysqli_fetch_assoc($result);
-
-        $sql = "UPDATE Proveedores_Contactos (ID_Proveedor, Nombre_Contacto, Telefono_Contacto, Correo_Contacto) VALUES ($id_p, '$nombre_contacto', '$telefono', '$correo')";
+         $sql = "UPDATE Proveedores_Contactos 
+                SET 
+                    Nombre_Contacto = '$nombre_contacto', 
+                    Telefono_Contacto = '$telefono', 
+                    Correo_Contacto = '$correo' 
+                WHERE ID_Contacto = $id";
         
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
       function actualizarCondicionPago($conn){
         $descripcion = isset($_POST["desc"]) ? htmlspecialchars($_POST["desc"]) : null;
-        $sql = "UPDATE condiciones_pago(descripcion) VALUES ('$descripcion');";
+        $sql = "UPDATE condiciones_pago(descripcion) SET descripcion='$descripcion' WHERE ID);";
         $result = mysqli_query($conn, $sql);
         header("Location: listados.php");
       }
@@ -451,22 +488,22 @@
         if (isset($_POST["table"])) {
           switch (strtolower($_POST["table"])){
             case "proveedores":
-              formProveedor();
+              formProveedor($server);
               break;
             case "contactos":
-              formContacto();
+              formContacto($server, $options);
               break;
             case "condiciones_pago":
-              formCondicionPago();
+              formCondicionPago($server);
               break;
             case "productos":
-              formProducto();
+              formProducto($server, $options, $categories);
               break;
             case "categorias":
-              formCategorias();
+              formCategorias($server);
               break;
             case "articulos_ofrecidos":
-              formArticulos();
+              formArticulos($server, $options, $categories);
               break;
             default:
               echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
@@ -474,13 +511,13 @@
           }
         }
 
-        if (isset($_POST["createData"])){
+        if (isset($_POST["createData"]) && isset($_GET["id"])){
             switch($_POST["createTable"]) {
                 case "proveedores":
-                    actualizarProveedor($conn);
+                    actualizarProveedor($conn, $_GET["id"]);
                     break;
                 case "contactos":
-                    actualizarContactos($conn);
+                    actualizarContactos($conn, $_GET["id"]);
                     break;
                 case "condiciones_pago":
                     actualizarCondicionPago($conn);

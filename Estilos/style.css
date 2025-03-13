@@ -35,6 +35,14 @@ h2 {
 
 #button {
   font-weight: bold;
-  background-color: #212a38;
+  background-color: #2a374a;
+  color: white;
+}
+
+form {
+  background-color: #202a34;
+}
+
+form label {
   color: white;
 }
