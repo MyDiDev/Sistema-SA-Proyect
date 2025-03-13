@@ -1,5 +1,5 @@
 <?php 
-include('conn.php');
+include('../Datos/conn.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,7 +87,7 @@ include('conn.php');
                     <td>$stock_m</td>
                     <td>$unidad</td>
 
-                    <td><a href=\"../CRUD/delete.php?di=$id&table=productos&id_col=ID\">Eliminar</a></td>
+                    <td><a href=\"../CRUD/delete.php?id=$id&table=productos&id_col=ID\">Eliminar</a></td>
                     <td><a href=\"../CRUD/update.php?di=$id&table=productos\">Editar</a></td>
                   </tr>
               ";
@@ -121,7 +121,7 @@ include('conn.php');
                     <tr>
                       <td>$id</td>
                       <td>$categoria</td>    
-                      <td><a href=\"../CRUD/delete.php?di=$id&table=categorias&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=categorias&id_col=ID\">Eliminar</a></td>
                       <td><a href=\"../CRUD/update.php?di=$id&table=categorias\">Editar</a></td>
                     </tr>
                 ";
@@ -156,7 +156,7 @@ include('conn.php');
                     <tr>
                       <td>$id</td>
                       <td>$descripcion</td>
-                      <td><a href=\"../CRUD/delete.php?di=$id&table=condiciones_pago&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=condiciones_pago&id_col=ID\">Eliminar</a></td>
                       <td><a href=\"../CRUD/update.php?di=$id&table=condiciones_pago\">Editar</a></td>
                     </tr>
                 ";
@@ -194,7 +194,7 @@ include('conn.php');
                       <td>$id</td>
                       <td>$proveedor</td>
                       <td>$producto</td>
-                      <td><a href=\"../CRUD/delete.php?di=$id&table=articulos_ofrecidos&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=articulos_ofrecidos&id_col=ID\">Eliminar</a></td>
                       <td><a href=\"../CRUD/update.php?di=$id&table=articulos_ofrecidos\">Editar</a></td>
                     </tr>
                 ";
@@ -238,7 +238,7 @@ include('conn.php');
                       <td>$contacto</td>
                       <td>$telefono</td>
                       <td>$correo</td>
-                      <td><a href=\"../CRUD/delete.php?di=$id&table=contactos&id_col=ID\">Eliminar</a></td>
+                      <td><a href=\"../CRUD/delete.php?id=$id&table=contactos&id_col=ID\">Eliminar</a></td>
                       <td><a href=\"../CRUD/update.php?di=$id&table=contactos\">Editar</a></td>
                     </tr>
                 ";
@@ -284,7 +284,7 @@ include('conn.php');
                     <td>$proveedor</td>
                     <td>$tiempo_promedio</td>
                     <td>$estado</td>
-                    <td><a href=\"../CRUD/delete.php?di=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
+                    <td><a href=\"../CRUD/delete.php?id=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
                     <td><a href=\"../CRUD/update.php?di=$id&table=proveedores\">Editar</a></td>
                   </tr>
               ";

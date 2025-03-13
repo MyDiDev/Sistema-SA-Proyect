@@ -1,5 +1,5 @@
 <?php 
-include('conn.php');
+include('../Datos/conn.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
