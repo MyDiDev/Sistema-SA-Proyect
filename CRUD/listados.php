@@ -42,7 +42,7 @@ include('../Datos/conn.php');
             
             $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover\">
+            <table class=\"table table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>PROVEEDOR</th>
@@ -87,8 +87,8 @@ include('../Datos/conn.php');
                     <td>$stock_m</td>
                     <td>$unidad</td>
 
-                    <td><a href=\"../CRUD/delete.php?id=$id&table=productos&id_col=ID\">Eliminar</a></td>
-                    <td><a href=\"../CRUD/update.php?di=$id&table=productos\">Editar</a></td>
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=productos&id_col=ID\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=productos\">Editar</a></td>
                   </tr>
               ";
             }
@@ -103,26 +103,26 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover\">
+              <table class=\"table table-striped table-hover w-75\">
                 <thead>
-                  <th>N.</th>
+                  <th>N.</ w-75th>
                   <th>PROVEEDOR</th>
-                  <th></th>
-                  <th></th>
+                  <th class=\"w-25\" ></th>
+                  <th class=\"w-25\"></th>
                 </thead>
                 <tbody>
             ";
 
             while ($row = mysqli_fetch_assoc($result)){
                 $id = $row["ID"];
-                $categoria = $row["nombre_categoria"];
+                $categoria = $row["Nombre_Categoria"];
 
                 echo"
                     <tr>
                       <td>$id</td>
                       <td>$categoria</td>    
-                      <td><a href=\"../CRUD/delete.php?id=$id&table=categorias&id_col=ID\">Eliminar</a></td>
-                      <td><a href=\"../CRUD/update.php?di=$id&table=categorias\">Editar</a></td>
+                      <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=categorias&id_col=ID\">Eliminar</a></td>
+                      <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=categorias\">Editar</a></td>
                     </tr>
                 ";
             }
@@ -138,7 +138,7 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover\">
+              <table class=\"table table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>DESCRIPCION</th>
@@ -156,8 +156,8 @@ include('../Datos/conn.php');
                     <tr>
                       <td>$id</td>
                       <td>$descripcion</td>
-                      <td><a href=\"../CRUD/delete.php?id=$id&table=condiciones_pago&id_col=ID\">Eliminar</a></td>
-                      <td><a href=\"../CRUD/update.php?di=$id&table=condiciones_pago\">Editar</a></td>
+                      <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=condiciones_pago&id_col=ID\">Eliminar</a></td>
+                      <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=condiciones_pago\">Editar</a></td>
                     </tr>
                 ";
             }
@@ -173,7 +173,7 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover\">
+              <table class=\"table table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>PROVEEDOR</th>
@@ -194,8 +194,8 @@ include('../Datos/conn.php');
                       <td>$id</td>
                       <td>$proveedor</td>
                       <td>$producto</td>
-                      <td><a href=\"../CRUD/delete.php?id=$id&table=articulos_ofrecidos&id_col=ID\">Eliminar</a></td>
-                      <td><a href=\"../CRUD/update.php?di=$id&table=articulos_ofrecidos\">Editar</a></td>
+                      <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=articulos_ofrecidos&id_col=ID\">Eliminar</a></td>
+                      <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=articulos_ofrecidos\">Editar</a></td>
                     </tr>
                 ";
             }
@@ -211,7 +211,7 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover\">
+              <table class=\"table table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>PROVEEDOR</th>
@@ -238,8 +238,8 @@ include('../Datos/conn.php');
                       <td>$contacto</td>
                       <td>$telefono</td>
                       <td>$correo</td>
-                      <td><a href=\"../CRUD/delete.php?id=$id&table=contactos&id_col=ID\">Eliminar</a></td>
-                      <td><a href=\"../CRUD/update.php?di=$id&table=contactos\">Editar</a></td>
+                      <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=contactos&id_col=ID\">Eliminar</a></td>
+                      <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=contactos\">Editar</a></td>
                     </tr>
                 ";
             }
@@ -250,13 +250,12 @@ include('../Datos/conn.php');
             ";
         }
 
-
         function showProveedoresTable($conn){
           $sql = "SELECT * FROM proveedores";
           $result = mysqli_query($conn, $sql);
 
           echo "
-            <table class=\"table table-striped table-hover\">
+            <table class=\"table table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>PROVEEDOR</th>
@@ -284,8 +283,8 @@ include('../Datos/conn.php');
                     <td>$proveedor</td>
                     <td>$tiempo_promedio</td>
                     <td>$estado</td>
-                    <td><a href=\"../CRUD/delete.php?id=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
-                    <td><a href=\"../CRUD/update.php?di=$id&table=proveedores\">Editar</a></td>
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=proveedores\">Editar</a></td>
                   </tr>
               ";
           }
@@ -296,8 +295,191 @@ include('../Datos/conn.php');
           ";
         } 
 
+        function showClientesTable($conn){
+            $sql = "SELECT clientes.id, clientes.nombre_razon_social, clientes.nombre_contacto, clientes.telefono, clientes.correo_electronico, codiciones_pago.descripcion FROM clientes JOIN condiciones_pago  ON clientes.id_condicion_pago = condiciones_pago.ID;";
+            
+            $result = mysqli_query($conn, $sql);
+            echo "
+            <table class=\"table table-striped table-hover w-75\">
+              <thead>
+                <th>N.</th>
+                <th>NOMBRE O RAZON SOCIAL</th>
+                <th>NOMBRE DEL CONTACTO</th>
+                <th>TELEFONO</th>
+                <th>EMAIL</th>
+                <th>CONDICION DE PAGO</th
 
-      if (isset($_POST["table"])){
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+            ";
+            while ($row = mysqli_fetch_assoc($result)){
+              $id = $row["id"];
+              $nombre_razon = $row["nombre_razon_social"];
+              $nombre_contacto = $row["nombre_contacto"];
+              $telefono = $row["telefono"];
+              $email = $row["correo_electronico"];
+              $condicion_pago = $row["descripcion"];
+              echo"
+                  <tr>
+                    <td>$id</td>
+                    <td>$nombre_razon</td>
+                    <td>$nombre_contacto</td>
+                    <td>$telefono</td>
+                    <td>$email</td>
+                    <td>$condicion_pago</td>
+
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=clientes&id_col=ID\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=clientes\">Editar</a></td>
+                  </tr>
+              ";
+            }
+            echo "
+              </tbody>
+            </table>
+            ";
+        }   
+        
+
+        function showDireccionesTable($conn){
+            $sql = "SELECT direcciones.id, clientes.nombre_razon_social, direccion.tipo_direccion, direccion.direccion FROM direcciones JOIN clientes ON direccion.id_cliente = clientes.id;";
+            
+            $result = mysqli_query($conn, $sql);
+            echo "
+            <table class=\"table table-striped table-hover w-75\">
+              <thead>
+                <th>N.</th>
+                <th>NOMBRE DEL CLIENTE</th>
+                <th>TIPO DE DIRECCION</th>
+                <th>DIRECCION</th>
+
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+            ";
+            while ($row = mysqli_fetch_assoc($result)){
+              $id = $row["id"];
+              $nombre_razon = $row["nombre_razon_social"];
+              $tipo_direccion = $row["tipo_direccion"];
+              $direccion = $row["direccion"];
+
+              echo"
+                  <tr>
+                    <td>$id</td>
+                    <td>$nombre_razon</td>
+                    <td>$tipo_direccion</td>
+                    <td>$direccion</td>
+
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=direcciones&id_col=id\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=direcciones\">Editar</a></td>
+                  </tr>
+              ";
+            }
+            echo "
+              </tbody>
+            </table>
+            ";
+        }   
+        
+
+        function showHistorialComprasTable($conn){
+            $sql = "SELECT historial_compras.id, clientes.nombre_razon_social, historial_compras.fecha_compra, historial_compras.monto_total, historial_compras.metodo_pago, historial_compras.estado_compra  FROM historial_compras JOIN clientes ON historial_compras.id_cliente = clientes.id;";
+            
+            $result = mysqli_query($conn, $sql);
+            echo "
+            <table class=\"table table-striped table-hover w-75\">
+              <thead>
+                <th>N.</th>
+                <th>NOMBRE DEL CLIENTE</th>
+                <th>FECHA DE COMPRA</th>
+                <th>MONTO TOTAL</th>
+                <th>METODO DE PAGO</th>
+                <th>ESTADO DE LA COMPRA</th>
+
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+            ";
+            while ($row = mysqli_fetch_assoc($result)){
+              $id = $row["ID"];
+              $nombre_razon = $row["nombre_razon_social"];
+              $fecha_compra = $row["fecha_compra"];
+              $monto_total = $row["monto_total"];
+              $estado_compra = $row["estado_compra"];
+              
+              echo"
+                  <tr>
+                    <td>$id</td>
+                    <td>$nombre_razon</td>
+                    <td>$fecha_compra</td>
+                    <td>$monto_total</td>
+                    <td>$estado_compra</td>
+
+
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=historial_compras&id_col=id\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=historial_compras\">Editar</a></td>
+                  </tr>
+              ";
+            }
+            echo "
+              </tbody>
+            </table>
+            ";
+        }   
+
+        function showArticulosComprado($conn){
+            $sql = "SELECT articulos_comprados.id, historial_compras.id as id_historial, productos.nombre_producto, articulos_comprados.cantidad, articulos_comprados.costo_unitario, articulos_comprados.costo_total FROM articulos_comprados JOIN productos ON articulos_comprados.id_producto = productos.id JOIN historial_compras ON articulos_comprados.id_historial = historial_compras.id;";
+            
+            $result = mysqli_query($conn, $sql);
+            echo "
+            <table class=\"table table-striped table-hover w-75\">
+              <thead>
+                <th>N.</th>
+                <th>N. DE HISTORIAL</th>
+                <th>NOMBRE DEL PRODUCTO</th>
+                <th>CANTIDAD</th>
+                <th>COSTO UNITARIO</th>
+                <th>COSTO TOTAL</th>
+
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody>
+            ";
+            while ($row = mysqli_fetch_assoc($result)){
+              $id = $row["id"];
+              $id_h = $row["id_historial"];
+              $nombre_producto = $row["nombre_producto"];
+              $cantidad = $row["cantidad"];
+              $costo_u = $row["costo_unitario"];
+              $costo_t = $row["costo_total"];
+              
+              echo"
+                  <tr>
+                    <td>$id</td>
+                    <td>$id_h</td>
+                    <td>$nombre_producto</td>
+                    <td>$cantidad</td>
+                    <td>$costo_u</td>
+                    <td>$costo_t</td>
+
+
+                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=articulos_comprados&id_col=id\">Eliminar</a></td>
+                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=articulos_comprados\">Editar</a></td>
+                  </tr>
+              ";
+            }
+            echo "
+              </tbody>
+            </table>
+            ";
+        }   
+        
+
+        if (isset($_POST["table"])){
             switch (strtolower($_POST["table"])){
                 case "proveedores":
                   showProveedoresTable($conn);
@@ -317,6 +499,18 @@ include('../Datos/conn.php');
                 case "articulos_ofrecidos":
                   showArticulosTable($conn);
                   break;
+                case "clientes":
+                    showClientesTable($conn);
+                    break;
+                case "direcciones":
+                  showDireccionesTable($conn);
+                  break;
+                case "articulos_comprados":
+                  showArticulosComprado($conn);
+                  break;
+                case "historial_compras":
+                  showHistorialComprasTable($conn);
+                  break; 
                 default:
                   session_destroy();
                   echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron Datos suficientes</div>";

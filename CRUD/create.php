@@ -1,7 +1,5 @@
 <?php 
-
 include("../Datos/conn.php");
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,9 +37,9 @@ include("../Datos/conn.php");
   
       $options = "";
       $categories = "";
-      
-      getAllProveedores($conn);
-      getAllCategories($conn);
+      $conditions = "";
+      $clients = "";
+      $products = "";
 
       function getAllProveedores($conn){
         global $options;
@@ -53,7 +51,7 @@ include("../Datos/conn.php");
           $options .= "<option value=\"$proveedor\">$proveedor</option>";
         }
       }
-
+      
       function getAllCategories($conn){
         global $categories;
         $sql = "SELECT nombre_categoria FROM categorias;";
@@ -65,9 +63,322 @@ include("../Datos/conn.php");
         }
       }
 
+      function getAllCondiciones($conn){
+        global $conditions;
+        $sql = "SELECT descripcion FROM condiciones_pago";      
+        $result = mysqli_query($conn, $sql);
+        if ($result) while ($row = mysqli_fetch_assoc($result)){
+          $desc = $row["descripcion"];
+          $conditions .= "<option value=\"$desc\">$desc</option>";
+        }
+      }
+
+      function getAllClients($conn){
+        global $clients;
+        $sql = "SELECT nombre_razon_social FROM clientes";      
+        $result = mysqli_query($conn, $sql);
+        if ($result) while ($row = mysqli_fetch_assoc($result)){
+          $desc = $row["nombre_razon_social"];
+          $clients .= "<option value=\"$desc\">$desc</option>";
+        }
+      }
+
+      getAllProveedores($conn);
+      getAllCategories($conn);
+      getAllCondiciones($conn);
+      getAllClients($conn);
+      getAllProducts($conn);
+
+      function getAllProducts($conn){
+        global $products;
+        $sql = "SELECT nombre_producto FROM productos";      
+        $result = mysqli_query($conn, $sql);
+        
+        if ($result) while ($row = mysqli_fetch_assoc($result)){
+          $product = $row["nombre_producto"];
+          $products .= "<option value=\"$product\">$product</option>";
+        }
+      }
+
+      # Formularios 
+
+      function formClientes($server, $conditions){
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Registra un Cliente</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="clientes">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre Del Cliente:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="nombre_cliente"
+                  id="nombre"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="n_contacto" class="form-label">Nombre del Contacto:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="nombre_contacto"
+                  id="n_contacto"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="" class="form-label">Numero de Telefono:</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  name="phone_num"
+                  id="phone_num"
+                  maxlength="12"
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  inputmode="numeric"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email del Cliente:</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="email"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="condition" class="form-label">Condicion De Pago:</label>
+                <select
+                  class="form-control"
+                  name="condition"
+                  rows="3"
+                  id="condition"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $conditions
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
+        EOD;
+      }
+
+      function formArticulosComprados($server, $producto, $clients){
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Registra un Articulo Comprado</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="articulos_comprados">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="client" class="form-label">Cliente:</label>
+                <select
+                  class="form-control"
+                  name="client"
+                  rows="3"
+                  id="client"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $clients
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="producto" class="form-label">Producto:</label>
+                <select
+                  class="form-control"
+                  name="producto"
+                  rows="3"
+                  id="producto"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $producto
+                </select>
+                <input type="hidden" value="null">
+              </div>
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Cantidad:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="quantity"
+                  id="quantity"
+                  style="background-color: #151c26; border: none; color: white"
+                  required  
+                />
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
+        EOD;
+      }
+
+      function formDirecciones($server, $clients){
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Registra una Direccion</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="direcciones">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="client" class="form-label">Cliente:</label>
+                <select
+                  class="form-control"
+                  name="client"
+                  rows="3"
+                  id="client"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $clients
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="tipo_direccion" class="form-label">Tipo de Direccion:</label>
+                <select
+                  class="form-control"
+                  name="tipo_direccion"
+                  rows="3"
+                  id="tipo_direccion"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  <option value="Residencial">Residencial</option>
+                  <option value="Comercial">Comercial</option>
+                  <option value="Entrega">Entrega</option>
+                  <option value="De un Punto de Referencia">De un Punto de Referencia</option>
+                  <option value="Rural">Rural</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="direccion" class="form-label">Direccion:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="direcciones"
+                  id="direccion"
+                  style="background-color: #151c26; border: none; color: white"
+                  required  
+                />
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
+        EOD;
+      }
+
+      function formHistorialCompras($server,  $clients){
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Registra una Direccion</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="createTable" value="historial_compras">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="client" class="form-label">Cliente:</label>
+                <select
+                  class="form-control"
+                  name="client"
+                  rows="3"
+                  id="client"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+                  $clients
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha de Compra:</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="fecha_compra"
+                  rows="3"
+                  id="fecha"
+                  style="background-color: #151c26; border: none; color: white"
+                  required
+                >
+              </div>
+              <div class="mb-3">
+                <label for="monto_total" class="form-label">Monto Total:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="monto_total"
+                  id="monto_total"
+                  style="background-color: #151c26; border: none; color: white"
+                  required  
+                />
+              </div>
+              <div class="mb-3">
+                <label for="metodo_pago" class="form-label">Metodo de Pago:</label>
+                <select
+                  class="form-control"
+                  name="metodo_pago"
+                  id="metodo_pago"
+                  style="background-color: #151c26; border: none; color: white"
+                  required  
+                >
+                  <option value="tarjeta">Tarjeta</option>
+                  <option value="fisico">Fisico</option>
+                  <option value="transaccion">Transacción</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="estado_compra" class="form-label">Estado de Compra:</label>
+                <select
+                  class="form-control"
+                  name="estado_compra"
+                  id="estado_compra"
+                  style="background-color: #151c26; border: none; color: white"
+                  required  
+                >
+                  <option value="realizada">Realizada</option>
+                  <option value="no realizada">No Realizada</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Registrar</button>
+        </form>
+        EOD;
+      }
+
       function formCategorias($server){
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra una Categoria</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -97,7 +408,7 @@ include("../Datos/conn.php");
 
       function formContacto($server, $options){
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra un Contacto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -167,7 +478,7 @@ include("../Datos/conn.php");
       function formCondicionPago($server){
 
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra una Condicion de Pago</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -194,7 +505,7 @@ include("../Datos/conn.php");
 
       function formProveedor($server){
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra un Proveedor</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -248,7 +559,7 @@ include("../Datos/conn.php");
       
       function formProducto($server,$proveedores, $categorias){
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra un Producto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -385,7 +696,7 @@ include("../Datos/conn.php");
 
       function formArticulos($server, $proveedores, $categorias){
         echo <<<EOD
-        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST">
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
           <h2>Registra un Contacto</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
@@ -425,6 +736,75 @@ include("../Datos/conn.php");
           <button class="btn w-100" id="button" type="submit">Registrar</button>
         </form>
         EOD;
+      }
+
+
+
+      # Agregar
+
+      function agregarCliente($conn){
+        $nombre_razon = isset($_POST["nombre_cliente"]) ? htmlspecialchars($_POST["nombre_cliente"]) : "";
+        $nombre_contacto = isset($_POST["nombre_contacto"]) ? htmlspecialchars($_POST["nombre_contacto"]) : "";
+        $email = isset($_POST["email"]) ? htmlspecialchars($_POST["email"]) : "";
+        $telefono = isset($_POST["phone_num"]) ? htmlspecialchars($_POST["phone_num"]) : "";
+        $condition = isset($_POST["condition"]) ? htmlspecialchars($_POST["condition"]) : "";
+
+        $sql = "SELECT id FROM condiciones_pago WHERE descripcion='$condition'";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $row =  mysqli_fetch_assoc($result);
+        $id_c = $row["id"];
+
+        $sql = "INSERT INTO clientes(nombre_razon_social, nombre_contacto, telefono, correo_electronico, id_condicion_pago) VALUES ('$nombre_razon', '$nombre_contacto', '$telefono', '$email', $id_c)";
+        $result = mysqli_query($conn, $sql);
+         header("../Principal/home.html");
+      }
+
+      function agregarDireccion($conn){
+        $cliente = isset($_POST["client"]) ? htmlspecialchars($_POST["client"]) : "";
+        $tipo = isset($_POST["tipo_direccion"]) ? htmlspecialchars($_POST["tipo_direccion"]) : "";
+        $direccion = isset($_POST["direcciones"]) ? htmlspecialchars($_POST["direcciones"]) : "";
+
+        $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $row = mysqli_fetch_assoc($result);
+        $id_client = $row["id"];
+
+        $sql = "INSERT INTO direcciones(id_cliente, tipo_direccion, direccion) VALUES($id_client, '$tipo', '$direccion');";
+        $result = mysqli_query($conn, $sql);
+        header("../Principal/home.html");
+      }
+
+      function agregarArticuloComprado($conn){
+        $cliente = isset($_POST["client"]) ? htmlspecialchars($_POST["client"]) : "";
+        $tipo = isset($_POST["tipo_direccion"]) ? htmlspecialchars($_POST["tipo_direccion"]) : "";
+        $direccion = isset($_POST["direccion"]) ? htmlspecialchars($_POST["direccion"]) : "";
+
+        $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $row = mysqli_fetch_assoc($result);
+        $id_client = $row["id"];
+
+        $sql = "INSERT INTO direcciones(id_cliente, tipo_direccion, direccion) VALUES($id_client, '$tipo', '$direccion');";
+        $result = mysqli_query($conn, $sql);
+        header("../Principal/home.html");
+      }
+
+      
+      function agregarHistorial($conn){
+        $cliente = isset($_POST["client"]) ? htmlspecialchars($_POST["client"]) : "";
+        $fecha = isset($_POST["fecha_compra"]) ? htmlspecialchars($_POST["fecha_compra"]) : "";
+        $metodo = isset($_POST["metodo_pago"]) ? htmlspecialchars($_POST["metodo_pago"]) : "";
+        $monto_t = isset($_POST["monto_total"]) ? htmlspecialchars($_POST["monto_total"]) : "";
+        $estado_c = isset($_POST["estado_compra"]) ? htmlspecialchars($_POST["estado_compra"]) : "";
+
+        $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $row = mysqli_fetch_assoc($result);
+        $id_client = $row["id"];
+
+        $sql = "INSERT INTO historial_compras(id_cliente, fecha_compra, monto_total, metodo_pago, estado_compra) VALUES($id_client, '$fecha', $monto_t, '$metodo', '$estado_c')";
+        $result = mysqli_query($conn, $sql);
+        header("../Principal/home.html");
       }
 
       function agregarProducto($conn){
@@ -549,6 +929,18 @@ include("../Datos/conn.php");
             case "articulos_ofrecidos":
               formArticulos($server, $options, $categories);
               break;
+            case "articulos_comprados":
+              formArticulosComprados($server, $products, $clients);
+              break;
+            case "clientes":
+              formClientes($server, $conditions);
+              break;
+            case "direcciones":
+              formDirecciones($server, $clients);
+              break;
+            case "historial_compras":
+              formHistorialCompras($server,  $clients);
+              break;
             default:
               echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron Datos suficientes</div>";
               break;
@@ -580,6 +972,18 @@ include("../Datos/conn.php");
               case "articulos_ofrecidos":
                 $_SESSION["table"] = "articulos_ofrecidos";
                 agregarArticulo($conn);
+                break;
+              case "articulos_comprados":
+                agregarArticuloComprado($conn);
+                break;
+              case "clientes":
+                agregarCliente($conn);
+                break;
+              case "direcciones":
+                agregarDireccion($conn);
+                break;
+              case "historial_compras":
+                agregarHistorial($conn);
                 break;
               default:
                 echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";

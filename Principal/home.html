@@ -45,6 +45,18 @@
                   Categorias
                 </button>
               </form>
+              <form action="../CRUD/create.php" method="POST" class="mb-3">
+                <input type="hidden" name="table" value="clientes" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Clientes
+                </button>
+              </form>
+              <form action="../CRUD/create.php" method="POST" class="mb-3">
+                <input type="hidden" name="table" value="direcciones" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Direcciones
+                </button>
+              </form>
             </div>
             <div class="col">
               <form action="../CRUD/create.php" method="POST" class="mb-3">
@@ -65,23 +77,38 @@
                   Articulo Ofrecido
                 </button>
               </form>
+              <form action="../CRUD/create.php" method="POST" class="mb-3">
+                <input type="hidden" name="table" value="historial_compras" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Historial de Compras
+                </button>
+              </form>
+              <form action="../CRUD/create.php" method="POST" class="mb-3">
+                <input type="hidden" name="table" value="articulos_comprados" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Articulos Comprados
+                </button>
+              </form>
             </div>
           </div>
-          <form action="../CRUD/listados.php" method="POST" class="mb-3">
+          <form action="../CRUD/listados.php" method="POST" class="mb-3" id="">
             <select
               class="form-control mb-3 p-3"
               name="table"
-              style="background-color: #202a34; border: none; color: white"
+              style="background-color: #ffbb00; border: none; color: white"
             >
               <option value="proveedores">proveedores</option>
               <option value="productos">productos</option>
+              <option value="clientes">clientes</option>
               <option value="contactos">contactos</option>
               <option value="condiciones_pago">condiciones de pago</option>
               <option value="categorias">categorias</option>
               <option value="articulos_ofrecidos">articulos ofrecidos</option>
+              <option value="historial_compras">historial de compras</option>
+              <option value="direcciones">direcciones</option>
             </select>
             <button id="link" type="submit" class="btn p-3 w-100">
-              Listados
+              Listar
             </button>
           </form>
         </div>
