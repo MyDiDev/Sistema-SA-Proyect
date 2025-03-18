@@ -4,7 +4,7 @@ html {
 
 body {
   font-family: "poppins", sans-serif;
-  background-color: #151c26;
+  background-color: #171819;
 }
 
 h2 {
@@ -15,7 +15,7 @@ h2 {
 }
 
 #link {
-  background-color: #202a34;
+  background-color: #212121;
   color: white;
 }
 
@@ -29,18 +29,18 @@ h2 {
 #mainCard,
 #providerCard,
 #productCard {
-  background-color: #2b3543;
+  background-color: #252525;
   border: none;
 }
 
 #button {
   font-weight: bold;
-  background-color: #2a374a;
+  background-color: #262727;
   color: white;
 }
 
 #form {
-  background-color: #202a34;
+  background-color: #272727;
 }
 
 form label {

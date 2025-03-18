@@ -42,7 +42,7 @@ include('../Datos/conn.php');
             
             $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>PROVEEDOR</th>
@@ -103,12 +103,12 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover w-75\">
+              <table class=\"table table-dark table-striped table-hover w-75\">
                 <thead>
                   <th>N.</ w-75th>
-                  <th>PROVEEDOR</th>
-                  <th class=\"w-25\" ></th>
-                  <th class=\"w-25\"></th>
+                  <th>CATEGORIA</th>
+                  <th></th>
+                  <th></th>
                 </thead>
                 <tbody>
             ";
@@ -138,7 +138,7 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover w-75\">
+              <table class=\"table table-dark table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>DESCRIPCION</th>
@@ -169,11 +169,11 @@ include('../Datos/conn.php');
         }
 
         function showArticulosTable($conn){
-            $sql = "SELECT * FROM articulos_ofrecidos";
+            $sql = "SELECT articulos_ofrecidos.id, proveedores.nombre_empresa, productos.nombre_producto FROM articulos_ofrecidos JOIN proveedores ON articulos_ofrecidos.ID_Proveedor = proveedores.ID JOIN productos ON articulos_ofrecidos.ID_Producto = productos.ID";
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover w-75\">
+              <table class=\"table table-dark table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>PROVEEDOR</th>
@@ -185,9 +185,9 @@ include('../Datos/conn.php');
             ";
 
             while ($row = mysqli_fetch_assoc($result)){
-                $id = $row["ID"];
-                $proveedor = $row["ID_Proveedor"];
-                $producto = $row["ID_Producto"];
+                $id = $row["id"];
+                $proveedor = $row["nombre_empresa"];
+                $producto = $row["nombre_producto"];
 
                 echo"
                     <tr>
@@ -211,7 +211,7 @@ include('../Datos/conn.php');
             $result = mysqli_query($conn, $sql);
 
             echo "
-              <table class=\"table table-striped table-hover w-75\">
+              <table class=\"table table-dark table-striped table-hover w-75\">
                 <thead>
                   <th>N.</th>
                   <th>PROVEEDOR</th>
@@ -255,7 +255,7 @@ include('../Datos/conn.php');
           $result = mysqli_query($conn, $sql);
 
           echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>PROVEEDOR</th>
@@ -280,7 +280,6 @@ include('../Datos/conn.php');
                     <td>$id</td>
                     <td>$proveedor</td>
                     <td>$direccion</td>
-                    <td>$proveedor</td>
                     <td>$tiempo_promedio</td>
                     <td>$estado</td>
                     <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=proveedores&id_col=ID\">Eliminar</a></td>
@@ -296,11 +295,11 @@ include('../Datos/conn.php');
         } 
 
         function showClientesTable($conn){
-            $sql = "SELECT clientes.id, clientes.nombre_razon_social, clientes.nombre_contacto, clientes.telefono, clientes.correo_electronico, codiciones_pago.descripcion FROM clientes JOIN condiciones_pago  ON clientes.id_condicion_pago = condiciones_pago.ID;";
+            $sql = "SELECT clientes.id, clientes.nombre_razon_social, clientes.nombre_contacto, clientes.telefono, clientes.correo_electronico, condiciones_pago.descripcion FROM clientes JOIN condiciones_pago  ON clientes.id_condicion_pago = condiciones_pago.ID;";
             
             $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>NOMBRE O RAZON SOCIAL</th>
@@ -311,6 +310,8 @@ include('../Datos/conn.php');
 
                 <th></th>
                 <th></th>
+                <th></th>
+
               </thead>
               <tbody>
             ";
@@ -341,13 +342,12 @@ include('../Datos/conn.php');
             ";
         }   
         
-
         function showDireccionesTable($conn){
-            $sql = "SELECT direcciones.id, clientes.nombre_razon_social, direccion.tipo_direccion, direccion.direccion FROM direcciones JOIN clientes ON direccion.id_cliente = clientes.id;";
+            $sql = "SELECT direcciones.id, clientes.nombre_razon_social, direcciones.tipo_direccion, direcciones.direccion FROM direcciones JOIN clientes ON direcciones.id_cliente = clientes.id;";
             
             $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>NOMBRE DEL CLIENTE</th>
@@ -385,11 +385,11 @@ include('../Datos/conn.php');
         
 
         function showHistorialComprasTable($conn){
-            $sql = "SELECT historial_compras.id, clientes.nombre_razon_social, historial_compras.fecha_compra, historial_compras.monto_total, historial_compras.metodo_pago, historial_compras.estado_compra  FROM historial_compras JOIN clientes ON historial_compras.id_cliente = clientes.id;";
+          $sql = "SELECT historial_compras.id, clientes.nombre_razon_social, historial_compras.fecha_compra, historial_compras.monto_total, historial_compras.metodo_pago, historial_compras.estado_compra  FROM historial_compras JOIN clientes ON historial_compras.id_cliente = clientes.id;";
             
-            $result = mysqli_query($conn, $sql);
+          $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>NOMBRE DEL CLIENTE</th>
@@ -403,24 +403,24 @@ include('../Datos/conn.php');
               </thead>
               <tbody>
             ";
-            while ($row = mysqli_fetch_assoc($result)){
-              $id = $row["ID"];
-              $nombre_razon = $row["nombre_razon_social"];
-              $fecha_compra = $row["fecha_compra"];
-              $monto_total = $row["monto_total"];
-              $estado_compra = $row["estado_compra"];
+          while ($row = mysqli_fetch_assoc($result)){
+            $id = $row["id"];
+            $nombre_razon = $row["nombre_razon_social"];
+            $fecha_compra = $row["fecha_compra"];
+            $metodo = $row["metodo_pago"];
+            $monto_total = $row["monto_total"];
+            $estado_compra = $row["estado_compra"];
               
-              echo"
-                  <tr>
-                    <td>$id</td>
-                    <td>$nombre_razon</td>
-                    <td>$fecha_compra</td>
-                    <td>$monto_total</td>
-                    <td>$estado_compra</td>
-
-
-                    <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=historial_compras&id_col=id\">Eliminar</a></td>
-                    <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=historial_compras\">Editar</a></td>
+            echo"
+                <tr>
+                  <td>$id</td>
+                  <td>$nombre_razon</td>
+                  <td>$fecha_compra</td>
+                  <td>$monto_total</td>
+                  <td>$metodo</td>
+                  <td>$estado_compra</td>
+                  <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=historial_compras&id_col=id\">Eliminar</a></td>
+                  <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=historial_compras\">Editar</a></td>
                   </tr>
               ";
             }
@@ -435,7 +435,7 @@ include('../Datos/conn.php');
             
             $result = mysqli_query($conn, $sql);
             echo "
-            <table class=\"table table-striped table-hover w-75\">
+            <table class=\"table table-dark table-striped table-hover w-75\">
               <thead>
                 <th>N.</th>
                 <th>N. DE HISTORIAL</th>
@@ -443,7 +443,6 @@ include('../Datos/conn.php');
                 <th>CANTIDAD</th>
                 <th>COSTO UNITARIO</th>
                 <th>COSTO TOTAL</th>
-
                 <th></th>
                 <th></th>
               </thead>
@@ -465,8 +464,6 @@ include('../Datos/conn.php');
                     <td>$cantidad</td>
                     <td>$costo_u</td>
                     <td>$costo_t</td>
-
-
                     <td><a class=\"btn btn-danger\"  href=\"../CRUD/delete.php?id=$id&table=articulos_comprados&id_col=id\">Eliminar</a></td>
                     <td><a class=\"btn btn-primary\"  href=\"../CRUD/update.php?di=$id&table=articulos_comprados\">Editar</a></td>
                   </tr>
@@ -500,8 +497,8 @@ include('../Datos/conn.php');
                   showArticulosTable($conn);
                   break;
                 case "clientes":
-                    showClientesTable($conn);
-                    break;
+                  showClientesTable($conn);
+                  break;
                 case "direcciones":
                   showDireccionesTable($conn);
                   break;

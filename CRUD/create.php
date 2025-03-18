@@ -32,6 +32,7 @@ include("../Datos/conn.php");
         height: 110dvh;
       "
     >
+  
     <?php
       $server = $_SERVER['PHP_SELF'];
   
@@ -83,12 +84,7 @@ include("../Datos/conn.php");
         }
       }
 
-      getAllProveedores($conn);
-      getAllCategories($conn);
-      getAllCondiciones($conn);
-      getAllClients($conn);
-      getAllProducts($conn);
-
+      
       function getAllProducts($conn){
         global $products;
         $sql = "SELECT nombre_producto FROM productos";      
@@ -99,9 +95,15 @@ include("../Datos/conn.php");
           $products .= "<option value=\"$product\">$product</option>";
         }
       }
+      
+      getAllProveedores($conn);
+      getAllCategories($conn);
+      getAllCondiciones($conn);
+      getAllClients($conn);
+      getAllProducts($conn);
 
       # Formularios 
-
+      
       function formClientes($server, $conditions){
         echo <<<EOD
         <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
@@ -119,7 +121,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="nombre_cliente"
                   id="nombre"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -130,7 +132,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="nombre_contacto"
                   id="n_contacto"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -144,7 +146,7 @@ include("../Datos/conn.php");
                   maxlength="12"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                   inputmode="numeric"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -155,7 +157,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="email"
                   id="email"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -166,7 +168,7 @@ include("../Datos/conn.php");
                   name="condition"
                   rows="3"
                   id="condition"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $conditions
@@ -197,7 +199,7 @@ include("../Datos/conn.php");
                   name="client"
                   rows="3"
                   id="client"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $clients
@@ -210,7 +212,7 @@ include("../Datos/conn.php");
                   name="producto"
                   rows="3"
                   id="producto"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $producto
@@ -224,7 +226,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="quantity"
                   id="quantity"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required  
                 />
               </div>
@@ -253,7 +255,7 @@ include("../Datos/conn.php");
                   name="client"
                   rows="3"
                   id="client"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $clients
@@ -266,7 +268,7 @@ include("../Datos/conn.php");
                   name="tipo_direccion"
                   rows="3"
                   id="tipo_direccion"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   <option value="Residencial">Residencial</option>
@@ -283,7 +285,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="direcciones"
                   id="direccion"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required  
                 />
               </div>
@@ -298,7 +300,7 @@ include("../Datos/conn.php");
       function formHistorialCompras($server,  $clients){
         echo <<<EOD
         <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
-          <h2>Registra una Direccion</h2>
+          <h2>Registro para el Historial de Compras</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
           <input type="hidden" name="createTable" value="historial_compras">
@@ -312,7 +314,7 @@ include("../Datos/conn.php");
                   name="client"
                   rows="3"
                   id="client"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $clients
@@ -326,7 +328,7 @@ include("../Datos/conn.php");
                   name="fecha_compra"
                   rows="3"
                   id="fecha"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
               </div>
@@ -337,7 +339,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="monto_total"
                   id="monto_total"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required  
                 />
               </div>
@@ -347,7 +349,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="metodo_pago"
                   id="metodo_pago"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required  
                 >
                   <option value="tarjeta">Tarjeta</option>
@@ -361,7 +363,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="estado_compra"
                   id="estado_compra"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required  
                 >
                   <option value="realizada">Realizada</option>
@@ -394,7 +396,7 @@ include("../Datos/conn.php");
                   name="desc"
                   rows="3"
                   id="desc"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -423,7 +425,7 @@ include("../Datos/conn.php");
                   name="proveedor"
                   rows="3"
                   id="proveedor"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $options
@@ -437,7 +439,7 @@ include("../Datos/conn.php");
                   name="nombre"
                   rows="3"
                   id="nombre"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -450,7 +452,7 @@ include("../Datos/conn.php");
                   name="telefono_contacto"
                   rows="3"
                   id="telefono_contacto"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -463,7 +465,7 @@ include("../Datos/conn.php");
                   name="correo"
                   rows="3"
                   id="correo"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -492,7 +494,7 @@ include("../Datos/conn.php");
                 name="desc"
                 rows="3"
                 id="desc"
-                style="background-color: #151c26; border: none; color: white"
+                style="background-color:rgb(20, 20, 20); border: none; color: white"
                 required
               ></textarea>
             </div>
@@ -520,7 +522,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="nombre_empresa"
                   id="provider"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -531,7 +533,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="direccion"
                   id="desc"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -542,7 +544,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="tiempo_entrega"
                   id="tiempo_entrega"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -573,7 +575,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="proveedor"
                   id="provider"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $proveedores
@@ -585,7 +587,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="desc"
                   id="desc"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 ></textarea>
               </div>
@@ -596,7 +598,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="codigo"
                   id="codigo"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
               </div>
@@ -609,7 +611,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="costo_a"
                   id="costo_a"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
               </div>
@@ -622,7 +624,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="unidad_medida"
                   id="unidad_medida"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -637,7 +639,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="nombre"
                   id="nombre"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -647,7 +649,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="categoria"
                   id="categoria"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $categorias
@@ -660,7 +662,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="precio_u"
                   id="precio_u"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -671,7 +673,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="stock_a"
                   id="stock_a"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -682,7 +684,7 @@ include("../Datos/conn.php");
                   class="form-control"
                   name="stock_m"
                   id="stock_m"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 />
               </div>
@@ -694,10 +696,10 @@ include("../Datos/conn.php");
         EOD;
       }
 
-      function formArticulos($server, $proveedores, $categorias){
+      function formArticulos($server, $proveedores, $products){
         echo <<<EOD
         <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
-          <h2>Registra un Contacto</h2>
+          <h2>Registra un Articulo Ofrecido</h2>
 
           <hr class="w-100 mt-4" color="black" size="7px" />
           <input type="hidden" name="createTable" value="contactos">
@@ -711,23 +713,23 @@ include("../Datos/conn.php");
                   name="proveedor"
                   rows="3"
                   id="proveedor"
-                  style="background-color: #151c26; border: none; color: white"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
                   $proveedores
                 </select>
               </div>
               <div class="mb-3">
-               <label for="categoria" class="form-label">Categoria:</label>
+               <label for="producto" class="form-label">Producto:</label>
                 <select
                   class="form-control"
-                  name="categoria"
+                  name="producto"
                   rows="3"
-                  id="categoria"
-                  style="background-color: #151c26; border: none; color: white"
+                  id="producto"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
                   required
                 >
-                  $categorias
+                  $products
                 </select>
               </div>
             </div>
@@ -737,8 +739,6 @@ include("../Datos/conn.php");
         </form>
         EOD;
       }
-
-
 
       # Agregar
 
@@ -756,7 +756,7 @@ include("../Datos/conn.php");
 
         $sql = "INSERT INTO clientes(nombre_razon_social, nombre_contacto, telefono, correo_electronico, id_condicion_pago) VALUES ('$nombre_razon', '$nombre_contacto', '$telefono', '$email', $id_c)";
         $result = mysqli_query($conn, $sql);
-         header("../Principal/home.html");
+        header("Location: ../Principal/home.html");
       }
 
       function agregarDireccion($conn){
@@ -771,22 +771,34 @@ include("../Datos/conn.php");
 
         $sql = "INSERT INTO direcciones(id_cliente, tipo_direccion, direccion) VALUES($id_client, '$tipo', '$direccion');";
         $result = mysqli_query($conn, $sql);
-        header("../Principal/home.html");
+        header("Location: ../Principal/home.html");
       }
 
       function agregarArticuloComprado($conn){
-        $cliente = isset($_POST["client"]) ? htmlspecialchars($_POST["client"]) : "";
-        $tipo = isset($_POST["tipo_direccion"]) ? htmlspecialchars($_POST["tipo_direccion"]) : "";
-        $direccion = isset($_POST["direccion"]) ? htmlspecialchars($_POST["direccion"]) : "";
+        try{
+          $cliente = isset($_POST["client"]) ? htmlspecialchars($_POST["client"]) : "";
+          $producto = isset($_POST["producto"]) ? htmlspecialchars($_POST["producto"]) : "";
+          $cantidad = isset($_POST["quantity"]) ? htmlspecialchars($_POST["quantity"]) : "";
 
-        $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
-        $result = mysqli_query($conn, $sql);
-        if ($result) $row = mysqli_fetch_assoc($result);
-        $id_client = $row["id"];
+          $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
+          $result = mysqli_query($conn, $sql);
+          if ($result) $row = mysqli_fetch_assoc($result); $id_client = $row["id"];
 
-        $sql = "INSERT INTO direcciones(id_cliente, tipo_direccion, direccion) VALUES($id_client, '$tipo', '$direccion');";
-        $result = mysqli_query($conn, $sql);
-        header("../Principal/home.html");
+          $sql = "SELECT id FROM historial_compras WHERE id_cliente=$id_client;";
+          $result = mysqli_query($conn, $sql);
+          if ($result) $row = mysqli_fetch_assoc($result); $id_historial = $row["id"];
+
+          $sql = "SELECT costo_unitario_adquisicion, id FROM productos  WHERE nombre_producto='$producto';";
+          $result = mysqli_query($conn, $sql);
+          if ($result) $row = mysqli_fetch_assoc($result); $costo_u = $row["costo_unitario_adquisicion"]; $id_producto= $row["id"];
+          
+          $sql = "INSERT INTO articulos_comprados(id_historial, id_producto, cantidad, costo_unitario) VALUES($id_historial, $id_producto, $cantidad, $costo_u);";
+          $result = mysqli_query($conn, $sql);
+          header("Location: ../Principal/home.html");
+        }catch(InvalidArgumentException){
+          echo "No se pudo econtrar el identificador del historial";
+          return;
+        }
       }
 
       
@@ -799,12 +811,11 @@ include("../Datos/conn.php");
 
         $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente';";
         $result = mysqli_query($conn, $sql);
-        if ($result) $row = mysqli_fetch_assoc($result);
-        $id_client = $row["id"];
+        if ($result) $row = mysqli_fetch_assoc($result); $id_client = $row["id"];
 
         $sql = "INSERT INTO historial_compras(id_cliente, fecha_compra, monto_total, metodo_pago, estado_compra) VALUES($id_client, '$fecha', $monto_t, '$metodo', '$estado_c')";
         $result = mysqli_query($conn, $sql);
-        header("../Principal/home.html");
+        header("Location: ../Principal/home.html");
       }
 
       function agregarProducto($conn){
@@ -830,7 +841,7 @@ include("../Datos/conn.php");
         $row = mysqli_fetch_assoc($result);
         $id_c = $row["ID"];
         
-        if ($id_p && $id_c){
+        if ($id_p and $id_c){
           $sql = "INSERT INTO productos(ID_Proveedor, ID_Categoria, Nombre_Producto, Descripcion_Producto, Codigo_Barra_O_SKU, Precio_Unitario_Venta, Costo_Unitario_Adquisicion, Stock_Actual, Stock_Minimo, Unidad_De_Medida)  VALUES ($id_p, $id_c, '$nombre_producto', '$descripcion', '$codigo', $precio_u, $costo_a, $stock_a, $stock_m, '$unidad_medida')";
 
           $result = mysqli_query($conn, $sql);
@@ -888,24 +899,19 @@ include("../Datos/conn.php");
       
       function agregarArticulo($conn){
         $proveedor = isset($_POST["proveedor"]) ? htmlspecialchars($_POST["proveedor"]) : null;
-        $nombre_producto = isset($_POST["nombre_producto"]) ? htmlspecialchars($_POST["nombre_producto"]) : null;
+        $nombre_producto = isset($_POST["producto"]) ? htmlspecialchars($_POST["producto"]) : null;
         
         $sql = "SELECT ID FROM proveedores WHERE nombre_empresa='$proveedor';";
         $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $id_p = $row["ID"];
+        if ($result) $row = mysqli_fetch_assoc($result); $id_p = $row["ID"];
 
         $sql = "SELECT ID FROM productos WHERE nombre_producto='$nombre_producto';";
         $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $id_pr = $row["ID"];
+        if ($result) $row = mysqli_fetch_assoc($result); $id_pr = $row["ID"];
         
-        if ($id_p && $id_pr){
-          $sql = "INSERT INTO articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
-          $result = mysqli_query($conn, $sql);
-          header("Location: ../Principal/home.html");
-        }
-
+        $sql = "INSERT INTO articulos_ofrecidos(ID_Proveedor, ID_Producto) VALUES($id_p, $id_pr);";
+        $result = mysqli_query($conn, $sql);
+        header("Location: ../Principal/home.html");
       }
 
       if ($_SERVER['REQUEST_METHOD'] == "POST"){
@@ -927,7 +933,7 @@ include("../Datos/conn.php");
               formCategorias($server);
               break;
             case "articulos_ofrecidos":
-              formArticulos($server, $options, $categories);
+              formArticulos($server, $options, $products);
               break;
             case "articulos_comprados":
               formArticulosComprados($server, $products, $clients);
@@ -947,30 +953,24 @@ include("../Datos/conn.php");
           }
         }
         elseif(isset($_POST["createTable"])){
-            session_start();
+            
             switch(strtolower($_POST["createTable"])) {
               case "proveedores":
-                $_SESSION["table"] = "proveedores";
                 agregarProveedor($conn);
                 break;
               case "contactos":
-                $_SESSION["table"] = "contactos";
                 agregarContactos($conn);
                 break;
               case "condiciones_pago":
-                $_SESSION["table"] = "condiciones_pago";
                 agregarCondicionPago($conn);
                 break;
               case "productos":
-                $_SESSION["table"] = "productos";
                 agregarProducto($conn);
                 break;
               case "categorias":
-                $_SESSION["table"] = "categorias";
                 agregarCategoria($conn);
                 break;
               case "articulos_ofrecidos":
-                $_SESSION["table"] = "articulos_ofrecidos";
                 agregarArticulo($conn);
                 break;
               case "articulos_comprados":
@@ -993,7 +993,7 @@ include("../Datos/conn.php");
       }
     ?>
   
-  </div>
+    </div>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
