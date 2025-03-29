@@ -36,11 +36,35 @@ include('../Datos/conn.php');
       $server = $_SERVER['PHP_SELF'];
       $id = isset($_GET['di']) ? htmlspecialchars($_GET['di']) : null;
   
-      $proveedores = "";
+      
+      $options = "";
       $categories = "";
       $conditions = "";
       $clients = "";
       $products = "";
+      $ventas = "";
+
+      function getAllProveedores($conn){
+        global $options;
+        $sql = "SELECT nombre_empresa FROM proveedores WHERE estado='Activo';";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $proveedor = $row["nombre_empresa"];
+          $options .= "<option value=\"$proveedor\">$proveedor</option>";
+        }
+      }
+      
+      function getAllCategories($conn){
+        global $categories;
+        $sql = "SELECT nombre_categoria FROM categorias;";
+        $result = mysqli_query($conn, $sql);
+
+        while ($row = mysqli_fetch_assoc($result)){
+          $categorie = $row["nombre_categoria"];
+          $categories .= "<option value=\"$categorie\">$categorie</option>";
+        }
+      }
 
       function getAllCondiciones($conn){
         global $conditions;
@@ -73,34 +97,23 @@ include('../Datos/conn.php');
         }
       }
 
+      function getAllSales($conn){
+        global $ventas;
+        $sql = "SELECT codigo_venta FROM ventas;";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) while ($row = mysqli_fetch_assoc($result)) {
+          $codigo = $row["codigo_venta"];
+          $ventas .= "<option value=\"$codigo\">$codigo</option>";
+        }
+      }
+      
       getAllProveedores($conn);
       getAllCategories($conn);
       getAllCondiciones($conn);
       getAllClients($conn);
       getAllProducts($conn);
+      getAllSales($conn);
 
-      function getAllProveedores($conn){
-        global $proveedores;
-        $sql = "SELECT nombre_empresa FROM proveedores WHERE estado='Activo';";
-        $result = mysqli_query($conn, $sql);
-
-        while ($row = mysqli_fetch_assoc($result)){
-          $proveedor = $row["nombre_empresa"];
-          $proveedores .= "<option value=\"$proveedor\">$proveedor</option>";
-        }
-      }
-
-      function getAllCategories($conn){
-        global $categories;
-        $sql = "SELECT nombre_categoria FROM categorias;";
-        $result = mysqli_query($conn, $sql);
-
-        while ($row = mysqli_fetch_assoc($result)){
-          $categorie = $row["nombre_categoria"];
-          $categories .= "<option value=\"$categorie\">$categorie</option>";
-        }
-      }
-      
       function formClientes($server, $conditions, $conn, $id){
         $sql = "SELECT * FROM clientes WHERE id=$id";
         $result = mysqli_query($conn, $sql);
@@ -901,6 +914,458 @@ include('../Datos/conn.php');
         EOD;
       }
 
+      function formInventario($server, $products, $id, $conn){
+        $sql = "SELECT * FROM inventario WHERE ID=$id;";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $id_product = $row["id_producto"];
+        $cant = $row["cantidad_disponible"];
+        $stock_m = $row["stock_maximo"];
+        $stock_min = $row["stock_minimo"];
+        $ubi = $row["ubicacion"];
+        
+        $sql = "SELECT Nombre_Producto FROM Productos WHERE ID=$id_product";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $product = $row["Nombre_Producto"];
+
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Actualizar Inventario</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="id" value="$id">
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="inventario">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+               <label for="producto" class="form-label">Producto:</label>
+                <select
+                  class="form-control"
+                  name="producto"
+                  rows="3"
+                  id="producto"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$product">$product</option>
+                  $products
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad Disponible:</label>
+                <input class="form-control" type="number" id="cantidad" name="cantidad"
+                value="$cant" style="background-color:rgb(20, 20, 20); color: white; border: none; color: white required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="stock_max" class="form-label">Stock maximo:</label>
+                <input class="form-control" type="number" id="stock_max" name="stock_max" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$stock_m" required>
+              </div>
+              
+              <div class="mb-3">
+                <label for="stock_min" class="form-label">Stock minimo:</label>
+                <input class="form-control" type="number" id="stock_min" name="stock_min" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$stock_min" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="ubicacion" class="form-label">Ubicacion:</label>
+                <textarea class="form-control" id="ubicacion" name="ubicacion" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$ubi" required></textarea>
+              </div>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Actualizar</button>
+        </form>
+        EOD;
+      }
+
+      function formVentas($server, $clients, $id, $conn){
+        $sql = "SELECT * FROM ventas WHERE ID=$id;";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $id_client = $row["id_cliente"];
+        $code = $row["codigo_venta"];
+        $date = $row["fecha_venta"];
+        $total = $row["monto_total"];
+        $state = $row["estado_venta"];
+        
+        $sql = "SELECT nombre_razon_social FROM clientes WHERE ID=$id_client";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $client = $row["nombre_razon_social"];
+
+        echo <<<EOD
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Actualizar Venta</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="id" value="$id">
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="ventas">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+               <label for="cliente" class="form-label">Cliente:</label>
+                <select
+                  class="form-control"
+                  name="cliente"
+                  rows="3"
+                  id="cliente"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$client">$client</option>
+                  $clients
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="fecha_venta" class="form-label">Fecha de Venta:</label>
+                <input class="form-control" type="date" id="fecha_venta" name="fecha_venta" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$date" required>
+              </div>
+              </div>
+              <div class="mb-3">
+                <label for="monto_total" class="form-label">Monto Total:</label>
+                <input class="form-control" type="number" id="monto_total" name="monto_total" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$total" required>
+              </div>
+              <div class="mb-3">
+               <label for="estado_venta" class="form-label">Estado de Venta:</label>
+               <select 
+                class="form-control"
+                style="background-color:rgb(20, 20, 20); border: none; color: white"
+                name="estado_venta"
+                id="estado_venta"
+                required
+              >
+                <option value="$state">$state</option>
+                <option value="Realizada">Realizada</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Actualizarr</button>
+        </form>
+        EOD;
+      } 
+
+      function formDetalleVentas($server, $products, $ventas, $id, $conn){
+        $sql = "SELECT * FROM detalle_ventas WHERE ID=$id;";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $id_venta = $row["id_venta"];
+        $id_producto = $row["id_producto"];
+        $cantida = $row["cantidad"];
+        $price = $row["precio_unitario"];
+        $total = $row["total"];
+        
+        $sql = "SELECT Nombre_Producto FROM productos WHERE ID=$id_producto";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $product = $row["Nombre_Producto"];
+
+        $sql = "SELECT codigo_venta FROM ventas WHERE ID=$id_venta";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $venta = $row["codigo_venta"];
+
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Actualizar Detalle de Venta</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="id" value="$id">
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="detalle_ventas">
+          <br />
+          <div class="row">
+            <div class="col">
+             <div class="mb-3">
+               <label for="producto" class="form-label">Producto:</label>
+                <select
+                  class="form-control"
+                  name="producto"
+                  rows="3"
+                  id="producto"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$product">$product</option>
+                  $products
+                </select>
+              </div>
+              <div class="mb-3">
+               <label for="venta" class="form-label">Codigo Venta:</label>
+                <select
+                  class="form-control"
+                  name="venta"
+                  rows="3"
+                  id="venta"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$venta">$venta</option>
+                  $ventas
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad:</label>
+                <input class="form-control" type="number" id="cantidad" name="cantidad" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$cantida" required>
+              </div>
+              <div class="mb-3">
+                <label for="precio_u" class="form-label">Precio Unitario:</label>
+                <input class="form-control" type="number" id="precio_u" name="precio_u" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$price"  required>
+              </div>
+              <div class="mb-3">
+                <label for="total" class="form-label">Total:</label>
+                <input class="form-control" type="number" id="total" name="total"   style="background-color:rgb(20, 20, 20); border: none; color: white" value="$total" required
+                readonly>
+              </div>
+          </div>
+          <br />
+          <script>
+            const unitaryPrice = document.getElementById('precio_u');  
+            const amount = document.getElementById('cantidad');
+
+            function setTotal(){
+              if (amount.value <= 0 || isNaN(amount.value) || unitaryPrice.value <= 0 || isNaN(unitaryPrice.value)) return;
+              const total = document.getElementById('total');
+              total.value = unitaryPrice.value * amount.value;
+            }
+
+            unitaryPrice.addEventListener('change', () =>{
+              setTotal();
+            });
+
+            amount.addEventListener('change', () =>{
+              setTotal();
+            });   
+          </script>
+          <button class="btn w-100" id="button" type="submit">Actualizarr</button>
+        </form>
+        EOD;
+      }
+
+      function formObservaciones($server, $ventas, $conn, $id){
+        
+        $sql = "SELECT * FROM observaciones WHERE ID=$id";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $id_venta = $row["id_venta"];
+        $feed = $row["observacion"];
+        
+        $sql = "SELECT codigo_venta FROM ventas WHERE ID=$id_venta";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $venta = $row["codigo_venta"];
+
+        echo <<<EOD
+        <form action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Actualizar Observacion</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="id" value="$id">
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="observaciones">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+               <label for="venta" class="form-label">Codigo Venta:</label>
+               <select
+                  class="form-control"
+                  name="venta"
+                  rows="3"
+                  id="venta"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$venta">$venta</option>
+                  $ventas
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="observacion" class="form-label">Observacion:</label>
+                <textarea class="form-control" id="observacion" name="observacion" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$feed" required></textarea>
+              </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Actualizarr</button>
+        </form>
+        EOD;
+      }
+
+      function formHistorialMov($server, $products, $id, $conn){
+        $sql = "SELECT * FROM historial_movimiento WHERE ID=$id;";
+
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $id_producto = $row["id_producto"];
+        $tipo_mov = $row["tipo_movimiento"];
+        $cant = $row["cantidad"];
+        $date = $row["fecha_movimiento"];
+        $reason = $row["motivo"];
+        
+        $sql = "SELECT Nombre_Producto FROM productos WHERE ID=$id_producto";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $product = $row["Nombre_Producto"];
+
+        echo <<<EOD
+        <form  action="$server" class="w-50 p-3 rounded shadow mt-5 mb-5" method="POST" id="formulary">
+          <h2>Actualizar Dato de Historial de movimiento</h2>
+
+          <hr class="w-100 mt-4" color="black" size="7px" />
+          <input type="hidden" name="id" value="$id">
+          <input type="hidden" name="createData" value="1">
+          <input type="hidden" name="createTable" value="historial_movimiento">
+          <br />
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+               <label for="producto" class="form-label">Producto:</label>
+                <select
+                  class="form-control"
+                  name="producto"
+                  id="producto"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$product">$product</option>
+                  $products
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="tipo_mov" class="form-label">Tipo del Movimiento:</label>
+                <select
+                  class="form-control"
+                  name="tipo_movmiento"
+                  id="tipo_mov"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  required
+                >
+                  <option value="$tipo_mov">$tipo_mov</option>
+                  <option value="Entrada">Entrada</option>
+                  <option value="Salida">Salida</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad:</label>
+                <input class="form-control" type="number" id="cantidad" name="cantidad" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$cant" required>
+              </div>
+              <div class="mb-3">
+                <label for="fecha_movimiento" class="form-label">Fecha del Movimiento:</label>
+                <input class="form-control" type="date" id="fecha_movimiento" name="fecha_movimiento" style="background-color:rgb(20, 20, 20); border: none; color: white" value="$date" required>
+              </div>
+              <div class="mb-3">
+               <label for="motivo" class="form-label">motivo:</label>
+                <textarea
+                  class="form-control"
+                  name="motivo"
+                  id="motivo"
+                  rows="3"
+                  style="background-color:rgb(20, 20, 20); border: none; color: white"
+                  value="$reason"
+                  required
+                >
+                </textarea>
+              </div>
+          </div>
+          <br />
+          <button class="btn w-100" id="button" type="submit">Actualizarr</button>
+        </form>
+        EOD;
+      }
+
+      # Agregar
+      function actualizarVenta($conn, $id){
+        $cliente = isset($_POST["cliente"]) ? htmlspecialchars($_POST["cliente"]) : null;
+        $fecha_venta = isset($_POST["fecha_venta"]) ? htmlspecialchars($_POST["fecha_venta"]) : null;
+        $monto_total = isset($_POST["monto_total"]) ? htmlspecialchars($_POST["monto_total"]) : null;
+        $estado_venta = isset($_POST["estado_venta"]) ? htmlspecialchars($_POST["estado_venta"]) : null;
+
+        $sql = "SELECT id FROM clientes WHERE nombre_razon_social='$cliente'";
+        $result = mysqli_query($conn, $sql);
+        if ($result) $row = mysqli_fetch_assoc($result); $id_cliente = $row["id"];
+        
+        $sql = "UPDATE ventas SET id_cliente=$id_cliente, fecha_venta='$fecha_venta', monto_total=$monto_total, estado_venta='$estado_venta' WHERE id=$id";
+        $result = mysqli_query($conn, $sql);
+        if ($result) header("Location: ../Principal/home.html");
+      }
+
+      function actualizarDetalleVenta($conn, $id){
+        $venta = isset($_POST["venta"]) ? htmlspecialchars($_POST["venta"]) : null;
+        $producto = isset($_POST["producto"]) ? htmlspecialchars($_POST["producto"]) : null;
+        $cant = isset($_POST["cantidad"]) ? htmlspecialchars($_POST["cantidad"]) : null;
+        $precio_u = isset($_POST["precio_u"]) ? htmlspecialchars($_POST["precio_u"]) : null;
+        $total = isset($_POST["total"]) ? htmlspecialchars($_POST["total"]) : null;
+
+        $sql = "SELECT ID FROM ventas WHERE codigo_venta='$venta'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) $row = mysqli_fetch_assoc($result); $id_venta = $row["ID"];
+
+        $sql = "SELECT ID FROM productos WHERE Nombre_Producto='$producto'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) $row = mysqli_fetch_assoc($result); $id_producto = $row["ID"];
+        
+        $sql = "UPDATE detalle_ventas SET id_venta=$id_venta, id_producto=$id_producto, cantidad=$cant, precio_unitario=$precio_u, total=$total WHERE id=$id;";
+        $result = mysqli_query($conn, $sql);
+        if ($result) header("Location: ../Principal/home.html"); 
+      }
+
+      function actualizarInventario($conn, $id){
+        $producto = isset($_POST["producto"]) ? htmlspecialchars($_POST["producto"]) : null;
+        $cantidad_d = isset($_POST["cantidad"]) ? htmlspecialchars($_POST["cantidad"]) : null;
+        $stock_min = isset($_POST["stock_min"]) ? htmlspecialchars($_POST["stock_min"]) : null;
+        $stock_max = isset($_POST["stock_max"]) ? htmlspecialchars($_POST["stock_max"]) : null;
+        $location = isset($_POST["ubicacion"]) ? htmlspecialchars($_POST["ubicacion"]) : null;
+
+        $sql = "SELECT ID FROM productos WHERE Nombre_Producto='$producto'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) $row = mysqli_fetch_assoc($result); $id_producto = $row["ID"];
+
+        $sql = "UPDATE inventario SET id_producto=$id_producto, cantidad_disponible=$cantidad_d, stock_maximo=$stock_max, stock_minimo=$stock_min, ubicacion='$location' WHERE id=$id";
+        $result = mysqli_query($conn, $sql);
+        if ($result) header("../Principal/home.html");
+      }
+
+      function actualizarObservacion($conn, $id){
+        $venta = isset($_POST["venta"]) ? htmlspecialchars($_POST["venta"]) : null;
+        $observacion = isset($_POST["observacion"]) ? htmlspecialchars($_POST["observacion"]) : null;
+
+        $sql = "SELECT ID FROM ventas WHERE codigo_venta='$venta'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) $row = mysqli_fetch_assoc($result); $id_venta = $row["ID"];
+
+        $sql = "UPDATE observaciones SET id_venta=$id_venta observacion='$observacion' WHERE id=$id;";
+        $result = mysqli_query($conn, $sql);
+        if ($result) header("../Principal/home.html");
+      }
+
+      function actualizarHistorialMov($conn, $id){
+        $producto = isset($_POST["producto"]) ? htmlspecialchars($_POST["producto"]) : null;
+        $type_mov = isset($_POST["tipo_movmiento"]) ? htmlspecialchars($_POST["tipo_movmiento"]) : null;
+        $cantidad = isset($_POST["cantidad"]) ? htmlspecialchars($_POST["cantidad"]) : null;
+        $fecha_movmiento = isset($_POST["fecha_movmiento"]) ? htmlspecialchars($_POST["fecha_movmiento"]) : null;
+        $motivo = isset($_POST["motivo"]) ? htmlspecialchars($_POST["motivo"]) : null;
+
+        $sql = "SELECT ID FROM productos WHERE Nombre_Producto='$producto'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) $row = mysqli_fetch_assoc($result); $id_producto = $row["ID"];
+
+        $sql = "UPDATE historial_movimiento SET id_producto=$id_producto, tipo_movimiento='$type_mov', cantidad=$cantidad, fecha_movimiento='$fecha_movmiento', motivo='$motivo' WHERE id=$id";
+        $result = mysqli_query($conn, $sql);
+        if ($result) header("../Principal/home.html");
+      }
+
       function actualizarProducto($conn, $id){
         if(!$id){
           echo "NULL ID given"; 
@@ -1108,6 +1573,21 @@ include('../Datos/conn.php');
           case "historial_compras":
             formHistorialCompras($server,  $clients, $id, $conn);
             break;
+          case "inventario":
+            formInventario($server,  $products, $id, $conn);
+            break;
+          case "observaciones":
+            formObservaciones($server,  $ventas, $id, $conn);
+            break;
+          case "historial_movimiento":
+            formHistorialMov($server,  $products, $id, $conn);
+            break;
+          case "ventas":
+            formVentas($server,  $clients, $id, $conn);
+            break;
+          case "detalle_ventas":
+            formDetalleVentas($server,   $products, $ventas, $id, $conn);
+            break;
           default:
             echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
             break;
@@ -1117,38 +1597,53 @@ include('../Datos/conn.php');
       if (isset($_POST["createData"])){
             switch($_POST["createTable"]) {
                 case "proveedores":
-                  actualizarProveedor($conn, $_POST["id"]);
+                  actualizarProveedor($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "contactos":
-                  actualizarContactos($conn, $_POST["id"]);
+                  actualizarContactos($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "condiciones_pago":
-                  actualizarCondicionPago($conn, $_POST["id"]);
+                  actualizarCondicionPago($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "productos":
-                  actualizarProducto($conn, $_POST["id"]);
+                  actualizarProducto($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "categorias":
-                  actualizarCategoria($conn, $_POST["id"]);
+                  actualizarCategoria($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "articulos_ofrecidos":
-                  actualizarArticulo($conn, $_POST["id"]);
+                  actualizarArticulo($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "articulos_comprados":
-                  actualizarArticuloComprado($conn, $_POST["id"]);
+                  actualizarArticuloComprado($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "clientes":
-                  actualizarCliente($conn, $_POST["id"]);
+                  actualizarCliente($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "direcciones":
-                  actualizarDireccion($conn, $_POST["id"]);
+                  actualizarDireccion($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 case "historial_compras":
-                  actualizarHistorial($conn,  $_POST["id"]);
+                  actualizarHistorial($conn,  htmlspecialchars($_POST["id"])??NULL);
+                  break;      
+                case "inventario":
+                  actualizarInventario($conn, htmlspecialchars($_POST["id"])??NULL);
+                  break;
+                case "observaciones":
+                  actualizarObservacion($conn, htmlspecialchars($_POST["id"])??NULL);
+                  break;
+                case "historial_movimiento":
+                  actualizarHistorialMov($conn, htmlspecialchars($_POST["id"])??NULL);
+                  break;
+                case "ventas":
+                  actualizarVenta($conn, htmlspecialchars($_POST["id"])??NULL);
+                  break;
+                case "detalle_ventas":
+                  actualizarDetalleVenta($conn, htmlspecialchars($_POST["id"])??NULL);
                   break;
                 default:
-                    echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
-                    break;
+                  echo "<div class=\"alert alert-danger\">ERROR OCURRIDO: No se econtraron datos suficientes</div>";
+                  break;
             }
       }
 

@@ -20,78 +20,189 @@
     <link rel="stylesheet" href="../Estilos/style.css" />
   </head>
   <body>
-    <div class="container-fluid" id="container">
-      <div data-aos="fade-up" class="w-50 p-3 rounded shadow-sm" id="mainCard">
+    <div class="container-fluid" id="container" style="height: 150dvh">
+      <div data-aos="fade-up" class="w-75 p-3 rounded shadow-sm" id="mainCard">
         <h2>Sistema S.A</h2>
         <hr class="w-100" color="black" size="7px" align="center" />
         <div class="d-f">
           <div class="row">
             <div class="col">
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="productos" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Productos
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="proveedores" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Proveedores
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="categorias" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Categorias
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="clientes" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Clientes
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="direcciones" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Direcciones
                 </button>
               </form>
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
+                <input type="hidden" name="table" value="ventas" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Ventas
+                </button>
+              </form>
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
+                <input type="hidden" name="table" value="inventario" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Inventario
+                </button>
+              </form>
             </div>
             <div class="col">
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="contactos" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Contacto
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="condiciones_pago" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Condicion de Pago
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="articulos_ofrecidos" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Articulo Ofrecido
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="historial_compras" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Historial de Compras
                 </button>
               </form>
-              <form action="../CRUD/create.php" method="POST" class="mb-3">
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
                 <input type="hidden" name="table" value="articulos_comprados" />
                 <button id="link" class="btn p-3 mb-3 w-100" type="submit">
                   Articulos Comprados
                 </button>
               </form>
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
+                <input type="hidden" name="table" value="detalle_ventas" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Detalles de Ventas
+                </button>
+              </form>
+              <form
+                data-aos="fade-down"
+                action="../CRUD/create.php"
+                method="POST"
+                class="mb-3"
+              >
+                <input type="hidden" name="table" value="observaciones" />
+                <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                  Observaciones
+                </button>
+              </form>
             </div>
+            <form
+              data-aos="fade-down"
+              action="../CRUD/create.php"
+              method="POST"
+              class="mb-3"
+            >
+              <input type="hidden" name="table" value="historial_movimiento" />
+              <button id="link" class="btn p-3 mb-3 w-100" type="submit">
+                Historial de Movimiento
+              </button>
+            </form>
           </div>
-          <form action="../CRUD/listados.php" method="POST" class="mb-3" id="">
+          <form
+            data-aos="fade-down"
+            action="../CRUD/listados.php"
+            method="POST"
+            class="mb-3"
+            id=""
+          >
             <select
               class="form-control mb-3 p-3"
               name="table"
@@ -111,7 +222,13 @@
               <option value="articulos_ofrecidos">articulos ofrecidos</option>
               <option value="articulos_comprados">articulos comprados</option>
               <option value="historial_compras">historial de compras</option>
-              <option value="direcciones">direcciones</option>
+              <option value="historial_movimiento">
+                Historial de movimiento
+              </option>
+              <option value="ventas">Ventas</option>
+              <option value="detalle_ventas">Detalle de ventas</option>
+              <option value="observaciones">Feedback</option>
+              <option value="inventario">Inventario</option>
             </select>
             <button id="link" type="submit" class="btn p-3 w-100">
               Listar
